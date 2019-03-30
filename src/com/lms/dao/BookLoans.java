@@ -2,7 +2,6 @@ package com.lms.dao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.lms.model.Book;
 import com.lms.model.Borrower;
