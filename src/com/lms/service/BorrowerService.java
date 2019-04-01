@@ -54,15 +54,29 @@ public interface BorrowerService extends Service {
 	 * @return true on success, false if the book was overdue
 	 */
 	boolean returnBook(Borrower borrower, Book book, Branch branch, LocalDate dueDate);
+
 	/**
 	 * Get all branches from which the borrower has an outstanding loan.
+	 * 
+	 * @param borrower in question
 	 * @return all branches the borrower owes a book return to.
 	 */
 	List<Branch> getAllBranchesWithLoan(Borrower borrower);
+
 	/**
 	 * Get all books the borrower has borrowed from any library branch.
+	 * 
+	 * @param borrower in question
 	 * @return the list of books the borrower has out from any library.
 	 */
 	List<Book> getAllBorrowedBooks(Borrower borrower);
+
+	/**
+	 * Get Borrower with the specified cardNo
+	 * 
+	 * @param cardNo the borrower's cardNo
+	 * @return Borrower or null if there is no Borrower with that cardNo
+	 */
+	Borrower getBorrower(int cardNo);
 
 }
