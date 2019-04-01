@@ -66,4 +66,9 @@ public final class Publisher {
 			return false;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Publisher: " + name + "(" + id + ") at " + address + " with phone: " + phone;
+	}
 }

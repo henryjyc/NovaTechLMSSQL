@@ -39,4 +39,9 @@ public final class Author {
 			return false;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Author: " + name + "(" + id + ")";
+	}
 }

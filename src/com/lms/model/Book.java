@@ -61,4 +61,9 @@ public class Book {
 			return false;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Book: " + title + " with " + Objects.toString(author, "No Author") + " and " + Objects.toString(publisher, "No Publisher");
+	}
 }

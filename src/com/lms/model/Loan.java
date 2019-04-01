@@ -66,4 +66,11 @@ public class Loan {
 			return false;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Loan: " + book.getTitle() + " borrowed from " + branch.getName() + " by " +
+	Objects.toString(borrower.getName(), Integer.toString(borrower.getCardNo())) + " checkout on " + Objects.toString(dateOut, "No checkout Date") +
+	" and due on " + Objects.toString(dueDate, "Never!");
+	}
 }

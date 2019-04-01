@@ -61,4 +61,9 @@ public class Borrower {
 			return false;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Borrower " + name + "(" + cardNo + ") at " + address + " with phone: " + phone;
+	}
 }

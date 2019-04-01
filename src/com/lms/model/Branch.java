@@ -50,4 +50,9 @@ public class Branch {
 			return false;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Branch: " + name + "(" + id + ") at " + address;
+	}
 }
