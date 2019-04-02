@@ -3,8 +3,12 @@ package com.lms.service;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.lms.customExceptions.TransactionException;
+import com.lms.customExceptions.UnknownSQLException;
+import com.lms.customExceptions.UpdateException;
 import com.lms.dao.BookDao;
 import com.lms.dao.CopiesDao;
 import com.lms.dao.LibraryBranchDao;
@@ -15,6 +19,10 @@ public final class LibrarianServiceImpl implements LibrarianService {
 	private final LibraryBranchDao branchDao;
 	private final BookDao bookDao;
 	private final CopiesDao copiesDao;
+	/**
+	 * Logger for handling errors in the DAO layer.
+	 */
+	private static final Logger LOGGER = Logger.getLogger(LibrarianService.class.getName());
 
 	/**
 	 * To construct an instance of this service class, the caller must supply
@@ -33,27 +41,57 @@ public final class LibrarianServiceImpl implements LibrarianService {
 
 	@Override
 	public List<Branch> getAllBranches() throws TransactionException {
-		throw new IllegalStateException("Not implemented");
+		try {
+			return branchDao.getAll();
+		} catch (final SQLException except) {
+			LOGGER.log(Level.SEVERE,  "SQL error while getting all branches", except);
+			// TODO: abort current transaction
+			throw new UnknownSQLException("Getting all branches failed", except);
+		}
 	}
 
 	@Override
 	public void updateBranch(final Branch branch) throws TransactionException {
-		throw new IllegalStateException("Not implemented");
+		try {
+			branchDao.update(branch);
+		} catch (final SQLException except) {
+			LOGGER.log(Level.SEVERE, "SQL error while updating a book", except);
+			// TODO: abort current transaction
+			throw new UpdateException("Updating book record failed");
+		}
 	}
 
 	@Override
 	public void setBranchCopies(final Branch branch, final Book book,
 			final int noOfCopies) throws TransactionException {
-		throw new IllegalStateException("Not implemented");
+		try {
+			copiesDao.setCopies(branch, book, noOfCopies);
+		} catch (final SQLException except) {
+			LOGGER.log(Level.SEVERE, "SQL error while setting copy records", except);
+			// TODO: abort current transaction
+			throw new UnknownSQLException("Setting copy records failed", except);
+		}
 	}
 
 	@Override
 	public List<Book> getAllBooks() throws TransactionException {
-		throw new IllegalStateException("Not implemented");
+		try {
+			return bookDao.getAll();
+		} catch (final SQLException except) {
+			LOGGER.log(Level.SEVERE, "SQL error while getting books", except);
+			// TODO: abort current transaction
+			throw new UnknownSQLException("Getting book records failed", except);
+		}
 	}
 
 	@Override
 	public Map<Branch, Map<Book, Integer>> getAllCopies() throws TransactionException {
-		throw new IllegalStateException("Not implemented");
+		try {
+			return copiesDao.getAllCopies();
+		} catch (final SQLException except) {
+			LOGGER.log(Level.SEVERE, "SQL error while getting copy records", except);
+			// TODO: abort current transaction
+			throw new UnknownSQLException("Getting copy records failed", except);
+		}
 	}
 }
