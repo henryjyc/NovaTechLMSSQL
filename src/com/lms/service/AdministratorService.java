@@ -7,6 +7,7 @@ import com.lms.model.Author;
 import com.lms.model.Book;
 import com.lms.model.Borrower;
 import com.lms.model.Branch;
+import com.lms.model.Loan;
 import com.lms.model.Publisher;
 
 /**
@@ -183,4 +184,12 @@ public interface AdministratorService extends Service {
 	 * @return true on success, false if no such loan currently exists
 	 */
 	boolean overrideDueDateForLoan(Book book, Borrower borrower, Branch branch, LocalDate dueDate);
+
+	/**
+	 * Get a list (order should not be relied on) of all the loans in the
+	 * database.
+	 *
+	 * @return all the loans in the database.
+	 */
+	List<Loan> getAllLoans();
 }
