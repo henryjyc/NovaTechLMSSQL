@@ -60,6 +60,7 @@ public final class MenuHelper {
 				&& !Character.isWhitespace(prompt.charAt(prompt.length() - 1))) {
 			stdout.print(' ');
 		}
+		stdout.flush();
 		return stdin.nextLine().trim();
 	}
 
