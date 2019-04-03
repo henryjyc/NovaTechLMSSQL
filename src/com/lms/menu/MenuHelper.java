@@ -25,6 +25,7 @@ public final class MenuHelper {
 	 * The means of sending output to the user.
 	 */
 	private final PrintWriter stdout;
+
 	/**
 	 * To construct this object, the caller must provide the input and output
 	 * streams it should use. The caller also retains responsibility for ensuring
@@ -98,11 +99,12 @@ public final class MenuHelper {
 	public OptionalInt getNumber(final String prompt) {
 		return getNumber(prompt, "That's not a number.");
 	}
+
 	/**
 	 * Prompt with the given prompt string; if the user's input is numeric, parse
 	 * and return it, and otherwise return nothing.
 	 *
-	 * @param prompt text to prompt the user with
+	 * @param prompt     text to prompt the user with
 	 * @param nonNumeric what to print if the input is not numeric.
 	 * @return the user's input, if numeric.
 	 */
@@ -166,14 +168,14 @@ public final class MenuHelper {
 	 * Ask the user to choose an item from the list, with a special "item 0" and
 	 * using toString to convert items to Strings to print.
 	 *
-	 * @param <T>       the type of items i the list
-	 * @param list      the list for the user to choose from
-	 * @param header    what to print above the list
-	 * @param prompt    how to prompt the user after printing the list
-	 * @param first     what to print as the first item
-	 * @param none      what to print if there are no items in the list
-	 * @param invalid   what to print if a number is input that is negative or too
-	 *                  large
+	 * @param <T>     the type of items i the list
+	 * @param list    the list for the user to choose from
+	 * @param header  what to print above the list
+	 * @param prompt  how to prompt the user after printing the list
+	 * @param first   what to print as the first item
+	 * @param none    what to print if there are no items in the list
+	 * @param invalid what to print if a number is input that is negative or too
+	 *                large
 	 * @return the empty optional if the list is empty or input is out of range, an
 	 *         optional containing the empty optional if the first item is chosen,
 	 *         and an optional containing an optional containing the user's choice
@@ -185,8 +187,11 @@ public final class MenuHelper {
 		return chooseFromList(list, header, prompt, first, none, invalid,
 				Objects::toString);
 	}
+
 	/**
-	 * Ask the user a yes-or-no question, and loop until the user answers it properly.
+	 * Ask the user a yes-or-no question, and loop until the user answers it
+	 * properly.
+	 *
 	 * @param prompt what to prompt the user with
 	 * @return true if "yes", false if "no".
 	 */
