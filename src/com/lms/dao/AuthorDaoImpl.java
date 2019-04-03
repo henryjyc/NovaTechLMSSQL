@@ -9,11 +9,32 @@ import java.util.List;
 
 import com.lms.model.Author;
 
+/**
+ * A DAO to provide an interface between the "author" table in the database and
+ * the other layers of the code.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class AuthorDaoImpl implements AuthorDao {
+	/**
+	 * The SQL query to update existing author rows.
+	 */
 	private final PreparedStatement updateStatement;
+	/**
+	 * The SQL query to delete author rows.
+	 */
 	private final PreparedStatement deleteStatement;
+	/**
+	 * The SQL query to find an author by ID.
+	 */
 	private final PreparedStatement findStatement;
+	/**
+	 * The SQL query to get all authors from the database.
+	 */
 	private final PreparedStatement getAllStatement;
+	/**
+	 * The SQL query to insert a new author into the database.
+	 */
 	private final PreparedStatement createStatement;
 
 	/**
@@ -21,6 +42,8 @@ public final class AuthorDaoImpl implements AuthorDao {
 	 * connection.
 	 *
 	 * @param dbConnection the database connection.
+	 * @throws SQLException on any unexpected database condition while setting up
+	 *                      prepared statements
 	 */
 	public AuthorDaoImpl(final Connection dbConnection) throws SQLException {
 		updateStatement = dbConnection.prepareStatement(

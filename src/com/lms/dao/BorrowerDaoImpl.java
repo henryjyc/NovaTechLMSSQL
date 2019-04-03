@@ -11,12 +11,41 @@ import java.util.Optional;
 
 import com.lms.model.Borrower;
 
+/**
+ * A DAO to provide an interface between the "borrowers" table in the database and
+ * the other layers of the code.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class BorrowerDaoImpl implements BorrowerDao {
+	/**
+	 * The SQL query to update existing borrower rows.
+	 */
 	private final PreparedStatement updateStatement;
+	/**
+	 * The SQL query to delete borrower rows.
+	 */
 	private final PreparedStatement deleteStatement;
+	/**
+	 * The SQL query to find a borrower by his or her ID.
+	 */
 	private final PreparedStatement findStatement;
+	/**
+	 * The SQL query to get all borrowers from the database.
+	 */
 	private final PreparedStatement getAllStatement;
+	/**
+	 * The SQL query to insert a new borrower into the database.
+	 */
 	private final PreparedStatement createStatement;
+	/**
+	 * To construct an instance of a DAO, the caller must provide a connection to
+	 * the database.
+	 *
+	 * @param dbConnection the database connection
+	 * @throws SQLException on any unexpected database condition while setting up
+	 *                      prepared statements
+	 */
 	public BorrowerDaoImpl(final Connection dbConnection) throws SQLException {
 		updateStatement = dbConnection.prepareStatement(
 				"UPDATE `tbl_borrower` SET `name` = ?, `address` = ?, `phone` = ? WHERE `cardNo` = ?");

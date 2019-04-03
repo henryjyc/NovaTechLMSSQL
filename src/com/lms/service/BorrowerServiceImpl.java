@@ -24,11 +24,31 @@ import com.lms.model.Borrower;
 import com.lms.model.Branch;
 import com.lms.model.Loan;
 
+/**
+ * The "service" class to help UIs for borrowers.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class BorrowerServiceImpl implements BorrowerService {
+	/**
+	 * The DAO for the "branches" table.
+	 */
 	private final LibraryBranchDao branchDao;
+	/**
+	 * The DAO for the "loans" table.
+	 */
 	private final BookLoansDao loanDao;
+	/**
+	 * The DAO for the "copies" table.
+	 */
 	private final CopiesDao copiesDao;
+	/**
+	 * The DAO for the "borrowers" table.
+	 */
 	private final BorrowerDao borrowerDao;
+	/**
+	 * The clock to get "the current time" from.
+	 */
 	private final Clock clock;
 	/**
 	 * Logger for handling errors in the DAO layer.

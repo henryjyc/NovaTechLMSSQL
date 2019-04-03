@@ -11,13 +11,42 @@ import java.util.Optional;
 
 import com.lms.model.Publisher;
 
+/**
+ * A DAO to provide an interface between the "publisher" table in the database
+ * and the other layers of the code.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class PublisherDaoImpl implements PublisherDao {
+	/**
+	 * The SQL query to update existing publisher rows.
+	 */
 	private final PreparedStatement updateStatement;
+	/**
+	 * The SQL query to delete publisher rows.
+	 */
 	private final PreparedStatement deleteStatement;
+	/**
+	 * The SQL query to find a publisher by its ID.
+	 */
 	private final PreparedStatement findStatement;
+	/**
+	 * The SQL query to get all publishers from the database.
+	 */
 	private final PreparedStatement getAllStatement;
+	/**
+	 * The SQL query to insert a new publisher into the database.
+	 */
 	private final PreparedStatement createStatement;
 
+	/**
+	 * To construct an instance of a DAO, the caller must provide a connection to
+	 * the database.
+	 *
+	 * @param dbConnection the database connection
+	 * @throws SQLException on any unexpected database condition while setting up
+	 *                      prepared statements
+	 */
 	public PublisherDaoImpl(final Connection dbConnection) throws SQLException {
 		updateStatement = dbConnection.prepareStatement(
 				"UPDATE `tbl_publisher` SET `publisherName` = ?, `publisherAddress` = ?, `publisherPhone` = ? WHERE `publisherId` = ?");

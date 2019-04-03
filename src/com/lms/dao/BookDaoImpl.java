@@ -12,13 +12,42 @@ import com.lms.model.Author;
 import com.lms.model.Book;
 import com.lms.model.Publisher;
 
+/**
+ * A DAO to provide an interface between the "book" table in the database and
+ * the other layers of the code.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class BookDaoImpl implements BookDao {
+	/**
+	 * The SQL query to update existing book rows.
+	 */
 	private final PreparedStatement updateStatement;
+	/**
+	 * The SQL query to delete book rows.
+	 */
 	private final PreparedStatement deleteStatement;
+	/**
+	 * The SQL query to find a book by ID.
+	 */
 	private final PreparedStatement findStatement;
+	/**
+	 * The SQL query to get all books from the database.
+	 */
 	private final PreparedStatement getAllStatement;
+	/**
+	 * The SQL query to insert a new book into the database.
+	 */
 	private final PreparedStatement createBookStatement;
 
+	/**
+	 * To construct an instance of a DAO, the caller must provide a connection to
+	 * the database.
+	 *
+	 * @param dbConnection the database connection
+	 * @throws SQLException on any unexpected database condition while setting up
+	 *                      prepared statements
+	 */
 	public BookDaoImpl(final Connection dbConnection) throws SQLException {
 		updateStatement = dbConnection.prepareStatement(
 				"UPDATE `tbl_book` SET `title` = ?, `authId` = ?, `pubId` = ? WHERE `bookId` = ?");

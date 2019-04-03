@@ -15,9 +15,23 @@ import com.lms.dao.LibraryBranchDao;
 import com.lms.model.Book;
 import com.lms.model.Branch;
 
+/**
+ * The "service" class to help UIs for librarians.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class LibrarianServiceImpl implements LibrarianService {
+	/**
+	 * The DAO for the "branches" table.
+	 */
 	private final LibraryBranchDao branchDao;
+	/**
+	 * The DAO for the "books" table.
+	 */
 	private final BookDao bookDao;
+	/**
+	 * The DAO for the "copies" table.
+	 */
 	private final CopiesDao copiesDao;
 	/**
 	 * Logger for handling errors in the DAO layer.

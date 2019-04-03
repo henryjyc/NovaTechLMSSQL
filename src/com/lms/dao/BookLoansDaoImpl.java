@@ -16,13 +16,42 @@ import com.lms.model.Branch;
 import com.lms.model.Loan;
 import com.lms.model.Publisher;
 
+/**
+ * A DAO to provide an interface between the "loans" table in the database and
+ * the other layers of the code.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class BookLoansDaoImpl implements BookLoansDao {
-	private final PreparedStatement createStatement;
+	/**
+	 * The SQL query to update existing loan rows.
+	 */
 	private final PreparedStatement updateStatement;
+	/**
+	 * The SQL query to delete loan rows.
+	 */
 	private final PreparedStatement deleteStatement;
+	/**
+	 * The SQL query to find a loan by its book, branch, and borrower.
+	 */
 	private final PreparedStatement findStatement;
+	/**
+	 * The SQL query to get all loans from the database.
+	 */
 	private final PreparedStatement getAllStatement;
+	/**
+	 * The SQL query to insert a new loan into the database.
+	 */
+	private final PreparedStatement createStatement;
 
+	/**
+	 * To construct an instance of a DAO, the caller must provide a connection to
+	 * the database.
+	 *
+	 * @param dbConnection the database connection
+	 * @throws SQLException on any unexpected database condition while setting up
+	 *                      prepared statements
+	 */
 	public BookLoansDaoImpl(final Connection dbConnection) throws SQLException {
 		createStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_book_loans` (`bookId`, `branchId`, `cardNo`, `dateOut`, `dueDate`) VALUES (?, ?, ?, ?, ?)");

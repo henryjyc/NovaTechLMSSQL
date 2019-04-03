@@ -12,16 +12,53 @@ import com.lms.model.Author;
 import com.lms.model.Book;
 import com.lms.model.Branch;
 import com.lms.model.Publisher;
-
+/**
+ * A DAO to provide an interface between the "copies" table in the database and
+ * the other layers of the code.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class CopiesDaoImpl implements CopiesDao {
+	/**
+	 * The SQL query to find a copies row in the database by book and branch.
+	 */
 	private final PreparedStatement findStatement;
+	/**
+	 * The SQL query to insert a copies record into the database where there wasn't
+	 * one before.
+	 */
 	private final PreparedStatement insertStatement;
+	/**
+	 * The SQL query to update a copies record in the database.
+	 */
 	private final PreparedStatement updateStatement;
+	/**
+	 * The SQL query to find all copies records in the database for a particular
+	 * branch.
+	 */
 	private final PreparedStatement findByBranchStatement;
+	/**
+	 * The SQL query to find all copies records in the database involving a
+	 * particular book.
+	 */
 	private final PreparedStatement findByBookStatement;
+	/**
+	 * The SQL query to get all copies records from the database.
+	 */
 	private final PreparedStatement getAllStatement;
+	/**
+	 * The SQL query to delete a copies record.
+	 */
 	private final PreparedStatement deleteStatement;
 
+	/**
+	 * To construct an instance of a DAO, the caller must provide a connection to
+	 * the database.
+	 *
+	 * @param dbConnection the database connection
+	 * @throws SQLException on any unexpected database condition while setting up
+	 *                      prepared statements
+	 */
 	public CopiesDaoImpl(final Connection dbConnection) throws SQLException {
 		getAllStatement = dbConnection.prepareStatement(
 				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_library_branch` ON `tbl_book_copies`.`branchId` = `tbl_library_branch`.`branchId` INNER JOIN `tbl_book` ON `tbl_book_copies`.`bookId` = `tbl_book`.`bookId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` INNER JOIN `tbl_author` ON `tbl_author`.`authorId` = `tbl_book`.`authId`");

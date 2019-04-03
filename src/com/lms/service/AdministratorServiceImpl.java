@@ -34,11 +34,29 @@ import com.lms.model.Publisher;
  *
  */
 public final class AdministratorServiceImpl implements AdministratorService {
+	/**
+	 * DAO to access the library-branch table.
+	 */
 	private final LibraryBranchDao branchDao;
+	/**
+	 * DAO to access the book table.
+	 */
 	private final BookDao bookDao;
+	/**
+	 * DAO to access the author table.
+	 */
 	private final AuthorDao authorDao;
+	/**
+	 * DAO to access the publisher table.
+	 */
 	private final PublisherDao publisherDao;
+	/**
+	 * DAO to access the borrower table.
+	 */
 	private final BorrowerDao borrowerDao;
+	/**
+	 * DAO to access the loans table.
+	 */
 	private final BookLoansDao loansDao;
 	/**
 	 * Logger for handling errors in the DAO layer.

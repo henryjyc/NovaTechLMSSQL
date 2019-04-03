@@ -11,13 +11,42 @@ import java.util.Optional;
 
 import com.lms.model.Branch;
 
+/**
+ * A DAO to provide an interface between the "library branch" table in the
+ * database and the other layers of the code.
+ *
+ * @author Jonathan Lovelace
+ */
 public final class LibraryBranchDaoImpl implements LibraryBranchDao {
+	/**
+	 * The SQL query to update existing branch rows.
+	 */
 	private final PreparedStatement updateStatement;
+	/**
+	 * The SQL query to delete branch rows.
+	 */
 	private final PreparedStatement deleteStatement;
+	/**
+	 * The SQL query to find a branch by its ID.
+	 */
 	private final PreparedStatement findStatement;
+	/**
+	 * The SQL query to get all branches from the database.
+	 */
 	private final PreparedStatement getAllStatement;
+	/**
+	 * The SQL query to insert a new branch into the database.
+	 */
 	private final PreparedStatement createStatement;
 
+	/**
+	 * To construct an instance of a DAO, the caller must provide a connection to
+	 * the database.
+	 *
+	 * @param dbConnection the database connection
+	 * @throws SQLException on any unexpected database condition while setting up
+	 *                      prepared statements
+	 */
 	public LibraryBranchDaoImpl(final Connection dbConnection) throws SQLException {
 		updateStatement = dbConnection.prepareStatement(
 				"UPDATE `tbl_library_branch` SET `branchName` = ?, `branchAddress` = ? WHERE `branchId` = ?");
