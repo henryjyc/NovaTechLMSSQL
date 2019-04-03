@@ -20,6 +20,11 @@ import com.lms.model.Publisher;
  */
 public final class CopiesDaoImpl implements CopiesDao {
 	/**
+	 * The name of the "number of copies" column in the database table, extracted
+	 * because it was used four times in this class.
+	 */
+	private static final String N_COPIES_FIELD = "noOfCopies";
+	/**
 	 * The SQL query to find a copies row in the database by book and branch.
 	 */
 	private final PreparedStatement findStatement;
@@ -87,7 +92,7 @@ public final class CopiesDaoImpl implements CopiesDao {
 					if (copies.isPresent()) {
 						throw new IllegalStateException("Multiple results for key");
 					} else {
-						copies = OptionalInt.of(result.getInt("noOfCopies"));
+						copies = OptionalInt.of(result.getInt(N_COPIES_FIELD));
 					}
 				}
 				return copies.orElse(0);
@@ -153,7 +158,7 @@ public final class CopiesDaoImpl implements CopiesDao {
 					}
 					final Book book = new Book(result.getInt("bookId"),
 							result.getString("title"), author, publisher);
-					retval.put(book, result.getInt("noOfCopies"));
+					retval.put(book, result.getInt(N_COPIES_FIELD));
 				}
 			}
 			return retval;
@@ -171,7 +176,7 @@ public final class CopiesDaoImpl implements CopiesDao {
 					final Branch branch = new Branch(result.getInt("branchId"),
 							result.getString("branchName"),
 							result.getString("branchAddress"));
-					retval.put(branch, result.getInt("noOfCopies"));
+					retval.put(branch, result.getInt(N_COPIES_FIELD));
 				}
 			}
 			return retval;
@@ -214,7 +219,7 @@ public final class CopiesDaoImpl implements CopiesDao {
 					}
 					final Book book = new Book(result.getInt("bookId"),
 							result.getString("title"), author, publisher);
-					innerMap.put(book, result.getInt("noOfCopies"));
+					innerMap.put(book, result.getInt(N_COPIES_FIELD));
 				}
 			}
 			return retval;
