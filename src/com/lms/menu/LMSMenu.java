@@ -32,14 +32,6 @@ public final class LMSMenu {
 	 */
 	private final MenuHelper mh;
 	/**
-	 * The means of getting input from the user.
-	 */
-	private final Scanner stdin;
-	/**
-	 * The means of sending output to the user.
-	 */
-	private final PrintWriter stdout;
-	/**
 	 * Our connection to the database.
 	 */
 	private final Connection connection;
@@ -59,9 +51,7 @@ public final class LMSMenu {
 	 */
 	public LMSMenu(final Reader inStream, final Writer outStream,
 			final Connection dbConnection) {
-		stdin = new Scanner(inStream);
-		stdout = new PrintWriter(outStream);
-		mh = new MenuHelper(stdin, stdout);
+		mh = new MenuHelper(new Scanner(inStream), new PrintWriter(outStream));
 		connection = dbConnection;
 	}
 
