@@ -145,6 +145,7 @@ public final class LibrarianMenu {
 				continue;
 			default:
 				mh.println("Unknown action");
+				break;
 			}
 		}
 	}
