@@ -93,14 +93,14 @@ public final class PublisherDaoImpl implements PublisherDao {
 			try (final ResultSet result = findStatement.executeQuery()) {
 				Publisher retval = null;
 				while (result.next()) {
-					if (retval != null) {
-						throw new IllegalStateException("Multiple results for key");
-					} else {
+					if (retval == null) {
 						retval = new Publisher(id, result.getString("publisherName"),
 								Optional.ofNullable(result.getString("publisherAddress"))
 										.orElse(""),
 								Optional.ofNullable(result.getString("publisherPhone"))
 										.orElse(""));
+					} else {
+						throw new IllegalStateException("Multiple results for key");
 					}
 				}
 				return retval;

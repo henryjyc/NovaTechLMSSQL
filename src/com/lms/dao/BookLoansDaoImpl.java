@@ -112,12 +112,12 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 			try (ResultSet result = findStatement.executeQuery()) {
 				Loan retval = null;
 				while (result.next()) {
-					if (retval != null) {
-						throw new IllegalStateException("Multiple results for key");
-					} else {
+					if (retval == null) {
 						retval = new Loan(book, borrower, branch,
 								result.getDate("dateOut").toLocalDate().atStartOfDay(),
 								result.getDate("dueDate").toLocalDate());
+					} else {
+						throw new IllegalStateException("Multiple results for key");
 					}
 				}
 				return retval;

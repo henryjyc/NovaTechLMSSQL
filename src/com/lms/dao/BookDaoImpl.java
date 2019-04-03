@@ -97,9 +97,7 @@ public final class BookDaoImpl implements BookDao {
 			try (ResultSet result = findStatement.executeQuery()) {
 				Book retval = null;
 				while (result.next()) {
-					if (retval != null) {
-						throw new IllegalStateException("Multiple results for key");
-					} else {
+					if (retval == null) {
 						Author author;
 						final int authorId = result.getInt("authorId");
 						if (result.wasNull()) {
@@ -119,6 +117,8 @@ public final class BookDaoImpl implements BookDao {
 						}
 						retval = new Book(id, result.getString("title"), author,
 								publisher);
+					} else {
+						throw new IllegalStateException("Multiple results for key");
 					}
 				}
 				return retval;

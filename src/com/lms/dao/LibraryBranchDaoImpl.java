@@ -93,14 +93,14 @@ public final class LibraryBranchDaoImpl implements LibraryBranchDao {
 			try (ResultSet result = findStatement.executeQuery()) {
 				Branch retval = null;
 				while (result.next()) {
-					if (retval != null) {
-						throw new IllegalStateException("Multiple results for key");
-					} else {
+					if (retval == null) {
 						retval = new Branch(id,
 								Optional.ofNullable(result.getString("branchName"))
 										.orElse(""),
 								Optional.ofNullable(result.getString("branchAddress"))
 										.orElse(""));
+					} else {
+						throw new IllegalStateException("Multiple results for key");
 					}
 				}
 				return retval;

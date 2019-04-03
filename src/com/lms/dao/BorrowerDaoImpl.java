@@ -92,13 +92,13 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 			try (ResultSet result = findStatement.executeQuery()) {
 				Borrower retval = null;
 				while (result.next()) {
-					if (retval != null) {
-						throw new IllegalStateException("Multiple results for key");
-					} else {
+					if (retval == null) {
 						retval = new Borrower(id, result.getString("name"), Optional
 								.ofNullable(result.getString("address")).orElse(""),
 								Optional.ofNullable(result.getString("phone"))
 										.orElse(""));
+					} else {
+						throw new IllegalStateException("Multiple results for key");
 					}
 				}
 				return retval;

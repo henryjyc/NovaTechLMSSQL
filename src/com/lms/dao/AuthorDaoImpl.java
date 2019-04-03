@@ -81,10 +81,10 @@ public final class AuthorDaoImpl implements AuthorDao {
 			try (ResultSet result = findStatement.executeQuery()) {
 				Author retval = null;
 				while (result.next()) {
-					if (retval != null) {
-						throw new IllegalStateException("Multiple results for key");
-					} else {
+					if (retval == null) {
 						retval = new Author(id, result.getString("authorName"));
+					} else {
+						throw new IllegalStateException("Multiple results for key");
 					}
 				}
 				return retval;
