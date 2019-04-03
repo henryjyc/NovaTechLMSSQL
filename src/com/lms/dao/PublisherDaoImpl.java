@@ -50,11 +50,12 @@ public final class PublisherDaoImpl implements PublisherDao {
 	public PublisherDaoImpl(final Connection dbConnection) throws SQLException {
 		updateStatement = dbConnection.prepareStatement(
 				"UPDATE `tbl_publisher` SET `publisherName` = ?, `publisherAddress` = ?, `publisherPhone` = ? WHERE `publisherId` = ?");
-		deleteStatement = dbConnection
-				.prepareStatement("DELETE FROM `tbl_publisher` WHERE `publisherId` = ?");
+		deleteStatement = dbConnection.prepareStatement(
+				"DELETE FROM `tbl_publisher` WHERE `publisherId` = ?");
 		findStatement = dbConnection.prepareStatement(
 				"SELECT * FROM `tbl_publisher` WHERE `publisherId` = ?");
-		getAllStatement = dbConnection.prepareStatement("SELECT * FROM `tbl_publisher`");
+		getAllStatement = dbConnection
+				.prepareStatement("SELECT * FROM `tbl_publisher`");
 		createStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_publisher` (`publisherName`, `publisherAddress`, `publisherPhone`) VALUES (?, ?, ?)");
 	}
@@ -95,9 +96,11 @@ public final class PublisherDaoImpl implements PublisherDao {
 				while (result.next()) {
 					if (retval == null) {
 						retval = new Publisher(id, result.getString("publisherName"),
-								Optional.ofNullable(result.getString("publisherAddress"))
+								Optional.ofNullable(
+										result.getString("publisherAddress"))
 										.orElse(""),
-								Optional.ofNullable(result.getString("publisherPhone"))
+								Optional.ofNullable(
+										result.getString("publisherPhone"))
 										.orElse(""));
 					} else {
 						throw new IllegalStateException("Multiple results for key");
@@ -127,8 +130,9 @@ public final class PublisherDaoImpl implements PublisherDao {
 	}
 
 	@Override
-	public Publisher create(final String publisherName, final String publisherAddress,
-			final String publisherPhone) throws SQLException {
+	public Publisher create(final String publisherName,
+			final String publisherAddress, final String publisherPhone)
+			throws SQLException {
 		synchronized (createStatement) {
 			createStatement.setString(1, publisherName);
 			if (publisherAddress.isEmpty()) {

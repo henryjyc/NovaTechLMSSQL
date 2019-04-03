@@ -99,7 +99,8 @@ public final class CopiesDaoImpl implements CopiesDao {
 	public void setCopies(final Branch branch, final Book book, final int noOfCopies)
 			throws SQLException {
 		if (noOfCopies < 0) {
-			throw new IllegalArgumentException("Number of copies must be nonnegative");
+			throw new IllegalArgumentException(
+					"Number of copies must be nonnegative");
 		} else if (noOfCopies == 0) {
 			synchronized (deleteStatement) {
 				deleteStatement.setInt(1, book.getId());
@@ -137,7 +138,8 @@ public final class CopiesDaoImpl implements CopiesDao {
 					if (result.wasNull()) {
 						author = null;
 					} else {
-						author = new Author(authorId, result.getString("authorName"));
+						author = new Author(authorId,
+								result.getString("authorName"));
 					}
 					final int publisherId = result.getInt("publisherId");
 					final Publisher publisher;
@@ -159,7 +161,8 @@ public final class CopiesDaoImpl implements CopiesDao {
 	}
 
 	@Override
-	public Map<Branch, Integer> getAllBookCopies(final Book book) throws SQLException {
+	public Map<Branch, Integer> getAllBookCopies(final Book book)
+			throws SQLException {
 		final Map<Branch, Integer> retval = new HashMap<>();
 		synchronized (findByBookStatement) {
 			findByBookStatement.setInt(1, book.getId());
@@ -196,7 +199,8 @@ public final class CopiesDaoImpl implements CopiesDao {
 					if (result.wasNull()) {
 						author = null;
 					} else {
-						author = new Author(authorId, result.getString("authorName"));
+						author = new Author(authorId,
+								result.getString("authorName"));
 					}
 					final int publisherId = result.getInt("publisherId");
 					final Publisher publisher;

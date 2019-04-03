@@ -97,7 +97,8 @@ public final class LibraryBranchDaoImpl implements LibraryBranchDao {
 						retval = new Branch(id,
 								Optional.ofNullable(result.getString("branchName"))
 										.orElse(""),
-								Optional.ofNullable(result.getString("branchAddress"))
+								Optional.ofNullable(
+										result.getString("branchAddress"))
 										.orElse(""));
 					} else {
 						throw new IllegalStateException("Multiple results for key");
@@ -142,7 +143,8 @@ public final class LibraryBranchDaoImpl implements LibraryBranchDao {
 			createStatement.executeUpdate();
 			try (ResultSet result = createStatement.getGeneratedKeys()) {
 				result.next();
-				return new Branch(result.getInt("branchId"), branchName, branchAddress);
+				return new Branch(result.getInt("branchId"), branchName,
+						branchAddress);
 			}
 		}
 	}

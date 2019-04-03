@@ -86,8 +86,9 @@ public final class BorrowerServiceImpl implements BorrowerService {
 	}
 
 	@Override
-	public Loan borrowBook(final Borrower borrower, final Book book, final Branch branch,
-			final LocalDateTime dateOut, final LocalDate dueDate) throws TransactionException {
+	public Loan borrowBook(final Borrower borrower, final Book book,
+			final Branch branch, final LocalDateTime dateOut,
+			final LocalDate dueDate) throws TransactionException {
 		try {
 			return loanDao.create(book, borrower, branch, dateOut, dueDate);
 		} catch (final SQLException except) {
@@ -98,7 +99,8 @@ public final class BorrowerServiceImpl implements BorrowerService {
 	}
 
 	@Override
-	public Map<Book, Integer> getAllBranchCopies(final Branch branch) throws TransactionException {
+	public Map<Book, Integer> getAllBranchCopies(final Branch branch)
+			throws TransactionException {
 		try {
 			return copiesDao.getAllBranchCopies(branch);
 		} catch (final SQLException except) {
@@ -138,13 +140,15 @@ public final class BorrowerServiceImpl implements BorrowerService {
 	}
 
 	@Override
-	public List<Branch> getAllBranchesWithLoan(final Borrower borrower) throws TransactionException {
+	public List<Branch> getAllBranchesWithLoan(final Borrower borrower)
+			throws TransactionException {
 		return getAllBorrowedBooks(borrower).parallelStream().map(Loan::getBranch)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Loan> getAllBorrowedBooks(final Borrower borrower) throws TransactionException {
+	public List<Loan> getAllBorrowedBooks(final Borrower borrower)
+			throws TransactionException {
 		try {
 			return loanDao.getAll().parallelStream()
 					.filter(loan -> borrower.equals(loan.getBorrower()))
