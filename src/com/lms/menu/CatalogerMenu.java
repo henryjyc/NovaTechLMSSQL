@@ -124,7 +124,7 @@ public final class CatalogerMenu {
 				publishers, prompt, "(Any other number to cancel.)\n" + prompt, "Add New",
 				"No publishers known", "No such publisher", Publisher::getName);
 		if (chosenPublisher.isPresent()) {
-			if (chosenPublisher.isPresent()) {
+			if (chosenPublisher.get().isPresent()) {
 				return chosenPublisher.get();
 			} else {
 				try {
