@@ -1,39 +1,119 @@
 package com.lms.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.lms.model.Borrower;
 
 public final class BorrowerDaoImpl implements BorrowerDao {
-	public BorrowerDaoImpl(final Connection dbConnection) {
-		throw new IllegalStateException("Not yet implemented");
+	private final PreparedStatement updateStatement;
+	private final PreparedStatement deleteStatement;
+	private final PreparedStatement findStatement;
+	private final PreparedStatement getAllStatement;
+	private final PreparedStatement createStatement;
+	public BorrowerDaoImpl(final Connection dbConnection) throws SQLException {
+		updateStatement = dbConnection.prepareStatement(
+				"UPDATE `tbl_borrower` SET `name` = ?, `address` = ?, `phone` = ? WHERE `cardNo` = ?");
+		deleteStatement = dbConnection
+				.prepareStatement("DELETE FROM `tbl_borrower` WHERE `cardNo` = ?");
+		findStatement = dbConnection
+				.prepareStatement("SELECT * FROM `tbl_borrower` WHERE `cardNo` = ?");
+		getAllStatement = dbConnection.prepareStatement("SELECT * FROM `tbl_borrower`");
+		createStatement = dbConnection.prepareStatement(
+				"INSERT INTO `tbl_borrower` (`name`, `address`, `phone`) VALUES (?, ?, ?)");
 	}
 
 	@Override
-	public void update(final Borrower t) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+	public void update(final Borrower borrower) throws SQLException {
+		synchronized (updateStatement) {
+			updateStatement.setString(1, borrower.getName());
+			if (borrower.getAddress().isEmpty()) {
+				updateStatement.setNull(2, Types.VARCHAR);
+			} else {
+				updateStatement.setString(2, borrower.getAddress());
+			}
+			if (borrower.getPhone().isEmpty()) {
+				updateStatement.setNull(3, Types.VARCHAR);
+			} else {
+				updateStatement.setString(3, borrower.getPhone());
+			}
+			updateStatement.setInt(4, borrower.getCardNo());
+			updateStatement.executeUpdate();
+		}
 	}
 
 	@Override
-	public void delete(final Borrower t) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+	public void delete(final Borrower borrower) throws SQLException {
+		synchronized (deleteStatement) {
+			deleteStatement.setInt(1, borrower.getCardNo());
+			deleteStatement.executeUpdate();
+		}
 	}
 
 	@Override
 	public Borrower get(final int id) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		synchronized (findStatement) {
+			findStatement.setInt(1, id);
+			try (ResultSet result = findStatement.executeQuery()) {
+				Borrower retval = null;
+				while (result.next()) {
+					if (retval != null) {
+						throw new IllegalStateException("Multiple results for key");
+					} else {
+						retval = new Borrower(id, result.getString("name"), Optional
+								.ofNullable(result.getString("address")).orElse(""),
+								Optional.ofNullable(result.getString("phone"))
+										.orElse(""));
+					}
+				}
+				return retval;
+			}
+		}
 	}
 
 	@Override
 	public List<Borrower> getAll() throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		final List<Borrower> retval = new ArrayList<>();
+		synchronized (getAllStatement) {
+			try (final ResultSet result = getAllStatement.executeQuery()) {
+				while (result.next()) {
+					retval.add(new Borrower(result.getInt("cardNo"),
+							result.getString("name"),
+							Optional.ofNullable(result.getString("address")).orElse(""),
+							Optional.ofNullable(result.getString("phone")).orElse("")));
+				}
+			}
+		}
+		return retval;
 	}
 
 	@Override
 	public Borrower create(final String borrowerName, final String borrowerAddress,
 			final String borrowerPhone) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		synchronized (createStatement) {
+			createStatement.setString(1, borrowerName);
+			if (borrowerAddress.isEmpty()) {
+				createStatement.setNull(2, Types.VARCHAR);
+			} else {
+				createStatement.setString(2, borrowerAddress);
+			}
+			if (borrowerPhone.isEmpty()) {
+				createStatement.setNull(3, Types.VARCHAR);
+			} else {
+				createStatement.setString(3, borrowerPhone);
+			}
+			createStatement.executeUpdate();
+			try (final ResultSet result = createStatement.getGeneratedKeys()) {
+				result.next();
+				return new Borrower(result.getInt("cardNo"), borrowerName,
+						borrowerAddress, borrowerPhone);
+			}
+		}
 	}
 }

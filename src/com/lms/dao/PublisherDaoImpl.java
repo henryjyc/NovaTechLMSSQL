@@ -1,39 +1,123 @@
 package com.lms.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.lms.model.Publisher;
 
 public final class PublisherDaoImpl implements PublisherDao {
-	public PublisherDaoImpl(final Connection dbConnection) {
-		throw new IllegalStateException("Not yet implemented");
+	private final PreparedStatement updateStatement;
+	private final PreparedStatement deleteStatement;
+	private final PreparedStatement findStatement;
+	private final PreparedStatement getAllStatement;
+	private final PreparedStatement createStatement;
+
+	public PublisherDaoImpl(final Connection dbConnection) throws SQLException {
+		updateStatement = dbConnection.prepareStatement(
+				"UPDATE `tbl_publisher` SET `publisherName` = ?, `publisherAddress` = ?, `publisherPhone` = ? WHERE `publisherId` = ?");
+		deleteStatement = dbConnection
+				.prepareStatement("DELETE FROM `tbl_publisher` WHERE `publisherId` = ?");
+		findStatement = dbConnection.prepareStatement(
+				"SELECT * FROM `tbl_publisher` WHERE `publisherId` = ?");
+		getAllStatement = dbConnection.prepareStatement("SELECT * FROM `tbl_publisher`");
+		createStatement = dbConnection.prepareStatement(
+				"INSERT INTO `tbl_publisher` (`publisherName`, `publisherAddress`, `publisherPhone`) VALUES (?, ?, ?)");
 	}
 
 	@Override
-	public void update(final Publisher t) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+	public void update(final Publisher publisher) throws SQLException {
+		synchronized (updateStatement) {
+			updateStatement.setString(1, publisher.getName());
+			if (publisher.getAddress().isEmpty()) {
+				updateStatement.setNull(2, Types.VARCHAR);
+			} else {
+				updateStatement.setString(2, publisher.getAddress());
+			}
+			if (publisher.getPhone().isEmpty()) {
+				updateStatement.setNull(3, Types.VARCHAR);
+			} else {
+				updateStatement.setString(3, publisher.getPhone());
+			}
+			updateStatement.setInt(4, publisher.getId());
+			updateStatement.executeUpdate();
+		}
 	}
 
 	@Override
-	public void delete(final Publisher t) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+	public void delete(final Publisher publisher) throws SQLException {
+		synchronized (deleteStatement) {
+			deleteStatement.setInt(1, publisher.getId());
+			deleteStatement.executeUpdate();
+		}
 	}
 
 	@Override
 	public Publisher get(final int id) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		synchronized (findStatement) {
+			findStatement.setInt(1, id);
+			try (final ResultSet result = findStatement.executeQuery()) {
+				Publisher retval = null;
+				while (result.next()) {
+					if (retval != null) {
+						throw new IllegalStateException("Multiple results for key");
+					} else {
+						retval = new Publisher(id, result.getString("publisherName"),
+								Optional.ofNullable(result.getString("publisherAddress"))
+										.orElse(""),
+								Optional.ofNullable(result.getString("publisherPhone"))
+										.orElse(""));
+					}
+				}
+				return retval;
+			}
+		}
 	}
 
 	@Override
 	public List<Publisher> getAll() throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		final List<Publisher> retval = new ArrayList<>();
+		synchronized (getAllStatement) {
+			try (final ResultSet result = getAllStatement.executeQuery()) {
+				while (result.next()) {
+					retval.add(new Publisher(result.getInt("publisherId"),
+							result.getString("publisherName"),
+							Optional.ofNullable(result.getString("publisherAddress"))
+									.orElse(""),
+							Optional.ofNullable(result.getString("publisherPhone"))
+									.orElse("")));
+				}
+				return retval;
+			}
+		}
 	}
 
 	@Override
 	public Publisher create(final String publisherName, final String publisherAddress,
 			final String publisherPhone) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		synchronized (createStatement) {
+			createStatement.setString(1, publisherName);
+			if (publisherAddress.isEmpty()) {
+				createStatement.setNull(2, Types.VARCHAR);
+			} else {
+				createStatement.setString(2, publisherAddress);
+			}
+			if (publisherPhone.isEmpty()) {
+				createStatement.setNull(3, Types.VARCHAR);
+			} else {
+				createStatement.setString(3, publisherPhone);
+			}
+			createStatement.executeUpdate();
+			try (final ResultSet result = createStatement.getGeneratedKeys()) {
+				result.next();
+				return new Publisher(result.getInt("publisherId"), publisherName,
+						publisherAddress, publisherPhone);
+			}
+		}
 	}
 }

@@ -72,42 +72,48 @@ public final class LMSMenu {
 	public void chooseRole() {
 		mh.println("Welcome to the GCIT Library Management System!");
 		mh.println();
-		while (true) {
-			mh.println("Please choose your role:");
-			mh.println("1) Patron");
-			mh.println("2) Librarian");
-			mh.println("3) Administrator");
-			switch (mh.getString("Role:")) {
-			case "0":
-				return;
-			case "1":
-				new BorrowerMenu(
-					new BorrowerServiceImpl(new LibraryBranchDaoImpl(connection),
-								new BookLoansDaoImpl(connection),
-								new CopiesDaoImpl(connection),
-								new BorrowerDaoImpl(connection),
-								Clock.systemDefaultZone()),
-						mh).menu();
-				return;
-			case "2":
-				new LibrarianMenu(
-						new LibrarianServiceImpl(new LibraryBranchDaoImpl(connection),
-								new BookDaoImpl(connection),
-								new CopiesDaoImpl(connection)),
-						mh).menu();
-				return;
-			case "3":
-				new AdministratorMenu(new AdministratorServiceImpl(
-						new LibraryBranchDaoImpl(connection),
-						new BookDaoImpl(connection), new AuthorDaoImpl(connection),
-						new PublisherDaoImpl(connection),
-						new BookLoansDaoImpl(connection),
-						new BorrowerDaoImpl(connection)), mh).menu();
-				return;
-			default:
-				mh.println("Please select role, or type 0 to quit");
-				break;
+		try {
+			while (true) {
+				mh.println("Please choose your role:");
+				mh.println("1) Patron");
+				mh.println("2) Librarian");
+				mh.println("3) Administrator");
+				switch (mh.getString("Role:")) {
+				case "0":
+					return;
+				case "1":
+					new BorrowerMenu(
+						new BorrowerServiceImpl(new LibraryBranchDaoImpl(connection),
+									new BookLoansDaoImpl(connection),
+									new CopiesDaoImpl(connection),
+									new BorrowerDaoImpl(connection),
+									Clock.systemDefaultZone()),
+							mh).menu();
+					return;
+				case "2":
+					new LibrarianMenu(
+							new LibrarianServiceImpl(new LibraryBranchDaoImpl(connection),
+									new BookDaoImpl(connection),
+									new CopiesDaoImpl(connection)),
+							mh).menu();
+					return;
+				case "3":
+					new AdministratorMenu(new AdministratorServiceImpl(
+							new LibraryBranchDaoImpl(connection),
+							new BookDaoImpl(connection), new AuthorDaoImpl(connection),
+							new PublisherDaoImpl(connection),
+							new BookLoansDaoImpl(connection),
+							new BorrowerDaoImpl(connection)), mh).menu();
+					return;
+				default:
+					mh.println("Please select role, or type 0 to quit");
+					break;
+				}
 			}
+		} catch (final SQLException except) {
+			LOGGER.log(Level.SEVERE, "SQL error initializing DB connection", except);
+			mh.println(
+					"An unrecoverable error occurred while trying to connect to the database.");
 		}
 	}
 }

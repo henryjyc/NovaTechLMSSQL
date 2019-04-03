@@ -1,41 +1,182 @@
 package com.lms.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.OptionalInt;
 
+import com.lms.model.Author;
 import com.lms.model.Book;
 import com.lms.model.Branch;
+import com.lms.model.Publisher;
 
 public final class CopiesDaoImpl implements CopiesDao {
-	public CopiesDaoImpl(final Connection dbConnection) {
-		throw new IllegalStateException("Not yet implemented");
+	private final PreparedStatement findStatement;
+	private final PreparedStatement insertStatement;
+	private final PreparedStatement updateStatement;
+	private final PreparedStatement findByBranchStatement;
+	private final PreparedStatement findByBookStatement;
+	private final PreparedStatement getAllStatement;
+	private final PreparedStatement deleteStatement;
+
+	public CopiesDaoImpl(final Connection dbConnection) throws SQLException {
+		getAllStatement = dbConnection.prepareStatement(
+				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_library_branch` ON `tbl_book_copies`.`branchId` = `tbl_library_branch`.`branchId` INNER JOIN `tbl_book` ON `tbl_book_copies`.`bookId` = `tbl_book`.`bookId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` INNER JOIN `tbl_author` ON `tbl_author`.`authorId` = `tbl_book`.`authId`");
+		findStatement = dbConnection.prepareStatement(
+				"SELECT * FROM `tbl_book_copies` WHERE `bookId` = ? AND `branchId` = ?");
+		insertStatement = dbConnection.prepareStatement(
+				"INSERT INTO `tbl_book_copies` (`bookId`, `branchId`, `noOfCopies`) VALUES (?, ?, ?)");
+		updateStatement = dbConnection.prepareStatement(
+				"UPDATE `tbl_book_copies` SET `noOfCopies` = ? WHERE `bookId` = ? AND `branchId` = ?");
+		findByBranchStatement = dbConnection.prepareStatement(
+				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_book` ON `tbl_book_copies`.`bookId` = `tbl_book`.`bookId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` INNER JOIN `tbl_author` ON `tbl_author`.`authorId` = `tbl_book`.`authId` WHERE `branchId` = ?");
+		findByBookStatement = dbConnection.prepareStatement(
+				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_library_branch` ON `tbl_book_copies`.`branchId` = `tbl_library_branch`.`branchId` WHERE `bookId` = ?");
+		deleteStatement = dbConnection.prepareStatement(
+				"DELETE FROM `tbl_book_copies` WHERE `bookId` = ? AND `branchId` = ?");
 	}
 
 	@Override
 	public int getCopies(final Branch branch, final Book book) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		synchronized (findStatement) {
+			findStatement.setInt(1, book.getId());
+			findStatement.setInt(2, branch.getId());
+			try (final ResultSet result = findStatement.executeQuery()) {
+				OptionalInt copies = OptionalInt.empty();
+				while (result.next()) {
+					if (copies.isPresent()) {
+						throw new IllegalStateException("Multiple results for key");
+					} else {
+						copies = OptionalInt.of(result.getInt("noOfCopies"));
+					}
+				}
+				return copies.orElse(0);
+			}
+		}
 	}
 
 	@Override
 	public void setCopies(final Branch branch, final Book book, final int noOfCopies)
 			throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		if (noOfCopies < 0) {
+			throw new IllegalArgumentException("Number of copies must be nonnegative");
+		} else if (noOfCopies == 0) {
+			synchronized (deleteStatement) {
+				deleteStatement.setInt(1, book.getId());
+				deleteStatement.setInt(2, branch.getId());
+				deleteStatement.executeUpdate();
+			}
+		} else if (getCopies(branch, book) == 0) {
+			// TODO: Use INSERT ... ON DUPLICATE KEY UPDATE
+			synchronized (insertStatement) {
+				insertStatement.setInt(1, book.getId());
+				insertStatement.setInt(2, branch.getId());
+				insertStatement.setInt(3, noOfCopies);
+				insertStatement.executeUpdate();
+			}
+		} else {
+			synchronized (updateStatement) {
+				updateStatement.setInt(1, book.getId());
+				updateStatement.setInt(2, branch.getId());
+				updateStatement.setInt(3, noOfCopies);
+				updateStatement.executeUpdate();
+			}
+		}
 	}
 
 	@Override
 	public Map<Book, Integer> getAllBranchCopies(final Branch branch)
 			throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		final Map<Book, Integer> retval = new HashMap<>();
+		synchronized (findByBranchStatement) {
+			findByBranchStatement.setInt(1, branch.getId());
+			try (ResultSet result = findByBranchStatement.executeQuery()) {
+				while (result.next()) {
+					final int authorId = result.getInt("authorId");
+					final Author author;
+					if (result.wasNull()) {
+						author = null;
+					} else {
+						author = new Author(authorId, result.getString("authorName"));
+					}
+					final int publisherId = result.getInt("publisherId");
+					final Publisher publisher;
+					if (result.wasNull()) {
+						publisher = null;
+					} else {
+						publisher = new Publisher(publisherId,
+								result.getString("publisherName"),
+								result.getString("publisherAddress"),
+								result.getString("publisherPhone"));
+					}
+					final Book book = new Book(result.getInt("bookId"),
+							result.getString("title"), author, publisher);
+					retval.put(book, result.getInt("noOfCopies"));
+				}
+			}
+			return retval;
+		}
 	}
 
 	@Override
 	public Map<Branch, Integer> getAllBookCopies(final Book book) throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		final Map<Branch, Integer> retval = new HashMap<>();
+		synchronized (findByBookStatement) {
+			findByBookStatement.setInt(1, book.getId());
+			try (ResultSet result = findByBookStatement.executeQuery()) {
+				while (result.next()) {
+					final Branch branch = new Branch(result.getInt("branchId"),
+							result.getString("branchName"),
+							result.getString("branchAddress"));
+					retval.put(branch, result.getInt("noOfCopies"));
+				}
+			}
+			return retval;
+		}
 	}
 
 	@Override
 	public Map<Branch, Map<Book, Integer>> getAllCopies() throws SQLException {
-		throw new IllegalStateException("Not yet implemented");
+		final Map<Branch, Map<Book, Integer>> retval = new HashMap<>();
+		synchronized (getAllStatement) {
+			try (final ResultSet result = getAllStatement.executeQuery()) {
+				while (result.next()) {
+					final Branch branch = new Branch(result.getInt("branchId"),
+							result.getString("branchName"),
+							result.getString("branchAddress"));
+					Map<Book, Integer> innerMap;
+					if (retval.containsKey(branch)) {
+						innerMap = retval.get(branch);
+					} else {
+						innerMap = new HashMap<>();
+						retval.put(branch, innerMap);
+					}
+					final int authorId = result.getInt("authorId");
+					final Author author;
+					if (result.wasNull()) {
+						author = null;
+					} else {
+						author = new Author(authorId, result.getString("authorName"));
+					}
+					final int publisherId = result.getInt("publisherId");
+					final Publisher publisher;
+					if (result.wasNull()) {
+						publisher = null;
+					} else {
+						publisher = new Publisher(publisherId,
+								result.getString("publisherName"),
+								result.getString("publisherAddress"),
+								result.getString("publisherPhone"));
+					}
+					final Book book = new Book(result.getInt("bookId"),
+							result.getString("title"), author, publisher);
+					innerMap.put(book, result.getInt("noOfCopies"));
+				}
+			}
+			return retval;
+		}
 	}
 }
