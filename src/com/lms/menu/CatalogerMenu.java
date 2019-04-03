@@ -251,13 +251,9 @@ public final class CatalogerMenu {
 			return;
 		}
 		final Book book;
-		if (chosenBook.isPresent()) {
-			if (chosenBook.get().isPresent()) {
-				book = chosenBook.get().get();
-			} else { // "Quit"
-				return;
-			}
-		} else { // none or input out of range
+		if (chosenBook.isPresent() && chosenBook.get().isPresent()) {
+			book = chosenBook.get().get();
+		} else {
 			return;
 		}
 		if (mh.inputBoolean("Change author of book?")) {
