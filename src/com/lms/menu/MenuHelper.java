@@ -129,7 +129,7 @@ public final class MenuHelper {
 			if (index == 0) {
 				return Optional.of(Optional.empty());
 			} else if (index <= list.size()) {
-				return Optional.of(Optional.of(list.get(index)));
+				return Optional.of(Optional.of(list.get(index - 1)));
 			} else {
 				return Optional.empty();
 			}
