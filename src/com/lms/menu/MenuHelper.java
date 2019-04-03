@@ -34,15 +34,39 @@ public final class MenuHelper {
 		stdin = inStream;
 		stdout = outStream;
 	}
+
+	/**
+	 * Print the given string to the output stream.
+	 *
+	 * @param string the string to print
+	 */
 	public void print(final String string) {
 		stdout.print(string);
 	}
+
+	/**
+	 * Print the given string to the output stream, then print a newline.
+	 *
+	 * @param string the string to print
+	 */
 	public void println(final String string) {
 		stdout.println(string);
 	}
+
+	/**
+	 * Print a newline to the output stream.
+	 */
 	public void println() {
 		stdout.println();
 	}
+
+	/**
+	 * Write a formatted string, using the given format string and arguments, to the
+	 * output stream.
+	 *
+	 * @param format the format to write
+	 * @param args   arguments to plug into the format string
+	 */
 	public void printf(final String format, final Object... args) {
 		stdout.printf(format, args);
 	}
