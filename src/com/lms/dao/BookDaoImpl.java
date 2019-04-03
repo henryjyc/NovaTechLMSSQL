@@ -39,6 +39,10 @@ public final class BookDaoImpl implements BookDao {
 	 * The SQL query to insert a new book into the database.
 	 */
 	private final PreparedStatement createBookStatement;
+	/**
+	 * The SQL query to get the newly created book's ID from the database.
+	 */
+	private final PreparedStatement findCreatedStatement;
 
 	/**
 	 * To construct an instance of a DAO, the caller must provide a connection to
@@ -59,6 +63,8 @@ public final class BookDaoImpl implements BookDao {
 				"SELECT * FROM `tbl_book` INNER JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId`");
 		createBookStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_book` (`title`, `authId`, `pubId`) VALUES(?, ?, ?)");
+		findCreatedStatement = dbConnection.prepareStatement(
+				"SELECT `bookId` FROM `tbl_book` WHERE `title` = ? AND `authId` = ? AND `pubId` = ? ORDER BY `bookId` DESC LIMIT 1");
 	}
 
 	@Override
@@ -162,20 +168,25 @@ public final class BookDaoImpl implements BookDao {
 			throws SQLException {
 		synchronized (createBookStatement) {
 			createBookStatement.setString(1, title);
+			findCreatedStatement.setString(1, title);
 			if (author == null) {
 				createBookStatement.setNull(2, Types.VARCHAR);
+				findCreatedStatement.setNull(2, Types.VARCHAR);
 			} else {
 				createBookStatement.setInt(2, author.getId());
+				findCreatedStatement.setInt(2, author.getId());
 			}
 			if (publisher == null) {
 				createBookStatement.setNull(3, Types.VARCHAR);
+				findCreatedStatement.setNull(3, Types.VARCHAR);
 			} else {
 				createBookStatement.setInt(3, publisher.getId());
+				findCreatedStatement.setInt(3, publisher.getId());
 			}
 			createBookStatement.executeUpdate();
-			try (ResultSet result = createBookStatement.getGeneratedKeys()) {
+			try (ResultSet result = findCreatedStatement.executeQuery()) {
 				result.next();
-				return new Book(result.getInt("authorId"), title, author, publisher);
+				return new Book(result.getInt("bookId"), title, author, publisher);
 			}
 		}
 	}

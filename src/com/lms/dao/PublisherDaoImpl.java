@@ -38,6 +38,10 @@ public final class PublisherDaoImpl implements PublisherDao {
 	 * The SQL query to insert a new publisher into the database.
 	 */
 	private final PreparedStatement createStatement;
+	/**
+	 * The SQL query to get the newly created publisher's ID from the database.
+	 */
+	private final PreparedStatement findCreatedStatement;
 
 	/**
 	 * To construct an instance of a DAO, the caller must provide a connection to
@@ -58,6 +62,8 @@ public final class PublisherDaoImpl implements PublisherDao {
 				.prepareStatement("SELECT * FROM `tbl_publisher`");
 		createStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_publisher` (`publisherName`, `publisherAddress`, `publisherPhone`) VALUES (?, ?, ?)");
+		findCreatedStatement = dbConnection.prepareStatement(
+				"SELECT `publisherId` FROM `tbl_publisher` WHERE `publisherName` = ? AND `publisherAddress` = ? AND `publisherPhone` = ? ORDER BY `publisherId` DESC LIMIT 1");
 	}
 
 	@Override
@@ -135,18 +141,23 @@ public final class PublisherDaoImpl implements PublisherDao {
 			throws SQLException {
 		synchronized (createStatement) {
 			createStatement.setString(1, publisherName);
+			findCreatedStatement.setString(1, publisherName);
 			if (publisherAddress.isEmpty()) {
 				createStatement.setNull(2, Types.VARCHAR);
+				findCreatedStatement.setNull(2, Types.VARCHAR);
 			} else {
 				createStatement.setString(2, publisherAddress);
+				findCreatedStatement.setString(2, publisherAddress);
 			}
 			if (publisherPhone.isEmpty()) {
 				createStatement.setNull(3, Types.VARCHAR);
+				findCreatedStatement.setNull(3, Types.VARCHAR);
 			} else {
 				createStatement.setString(3, publisherPhone);
+				findCreatedStatement.setString(3, publisherPhone);
 			}
 			createStatement.executeUpdate();
-			try (ResultSet result = createStatement.getGeneratedKeys()) {
+			try (ResultSet result = findCreatedStatement.executeQuery()) {
 				result.next();
 				return new Publisher(result.getInt("publisherId"), publisherName,
 						publisherAddress, publisherPhone);

@@ -39,6 +39,10 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 	 */
 	private final PreparedStatement createStatement;
 	/**
+	 * The SQL query to get the newly created borrower's ID from the database.
+	 */
+	private final PreparedStatement findCreatedStatement;
+	/**
 	 * To construct an instance of a DAO, the caller must provide a connection to
 	 * the database.
 	 *
@@ -56,6 +60,8 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 		getAllStatement = dbConnection.prepareStatement("SELECT * FROM `tbl_borrower`");
 		createStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_borrower` (`name`, `address`, `phone`) VALUES (?, ?, ?)");
+		findCreatedStatement = dbConnection.prepareStatement(
+				"SELECT `cardNo` FROM `tbl_borrower` WHERE `name` = ? AND `address` = ? AND `phone` = ? ORDER BY `cardNo` DESC LIMIT 1");
 	}
 
 	@Override
@@ -127,18 +133,23 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 			final String borrowerPhone) throws SQLException {
 		synchronized (createStatement) {
 			createStatement.setString(1, borrowerName);
+			findCreatedStatement.setString(1, borrowerName);
 			if (borrowerAddress.isEmpty()) {
 				createStatement.setNull(2, Types.VARCHAR);
+				findCreatedStatement.setNull(2, Types.VARCHAR);
 			} else {
 				createStatement.setString(2, borrowerAddress);
+				findCreatedStatement.setString(2, borrowerAddress);
 			}
 			if (borrowerPhone.isEmpty()) {
 				createStatement.setNull(3, Types.VARCHAR);
+				findCreatedStatement.setNull(3, Types.VARCHAR);
 			} else {
 				createStatement.setString(3, borrowerPhone);
+				findCreatedStatement.setString(3, borrowerPhone);
 			}
 			createStatement.executeUpdate();
-			try (ResultSet result = createStatement.getGeneratedKeys()) {
+			try (ResultSet result = findCreatedStatement.executeQuery()) {
 				result.next();
 				return new Borrower(result.getInt("cardNo"), borrowerName,
 						borrowerAddress, borrowerPhone);

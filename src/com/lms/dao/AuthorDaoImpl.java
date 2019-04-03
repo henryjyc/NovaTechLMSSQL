@@ -36,6 +36,10 @@ public final class AuthorDaoImpl implements AuthorDao {
 	 * The SQL query to insert a new author into the database.
 	 */
 	private final PreparedStatement createStatement;
+	/**
+	 * The SQL query to get the newly created author's ID from the database.
+	 */
+	private final PreparedStatement findCreatedStatement;
 
 	/**
 	 * To create an instance of this DAO, the caller must supply the database
@@ -55,6 +59,8 @@ public final class AuthorDaoImpl implements AuthorDao {
 		getAllStatement = dbConnection.prepareStatement("SELECT * FROM `tbl_author`");
 		createStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_author` (`authorName`) VALUES (?)");
+		findCreatedStatement = dbConnection.prepareStatement(
+				"SELECT `authorId` FROM `tbl_author` WHERE `authorName` = ? ORDER BY `authorId` DESC LIMIT 1");
 	}
 
 	@Override
@@ -111,7 +117,8 @@ public final class AuthorDaoImpl implements AuthorDao {
 		synchronized (createStatement) {
 			createStatement.setString(1, authorName);
 			createStatement.executeUpdate();
-			try (ResultSet result = createStatement.getGeneratedKeys()) {
+			findCreatedStatement.setString(1, authorName);
+			try (ResultSet result = findCreatedStatement.executeQuery()) {
 				result.next();
 				return new Author(result.getInt("authorId"), authorName);
 			}
