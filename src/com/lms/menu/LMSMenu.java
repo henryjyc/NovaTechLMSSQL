@@ -39,6 +39,10 @@ public final class LMSMenu {
 	 * Logger for logging unexpected errors.
 	 */
 	private static final Logger LOGGER = Logger.getLogger(LMSMenu.class.getName());
+	/**
+	 * The clock to get "the current time" from.
+	 */
+	private final Clock clock;
 
 	/**
 	 * To initialize the menu, the caller must provide I/O streams and the database
@@ -50,9 +54,10 @@ public final class LMSMenu {
 	 * @param dbConnection how to connect to the database
 	 */
 	public LMSMenu(final Reader inStream, final Writer outStream,
-			final Connection dbConnection) {
+			final Connection dbConnection, final Clock clock) {
 		mh = new MenuHelper(new Scanner(inStream), new PrintWriter(outStream));
 		connection = dbConnection;
+		this.clock = clock;
 	}
 
 	/**
@@ -76,9 +81,8 @@ public final class LMSMenu {
 						new BorrowerServiceImpl(new LibraryBranchDaoImpl(connection),
 									new BookLoansDaoImpl(connection),
 									new CopiesDaoImpl(connection),
-									new BorrowerDaoImpl(connection),
-									Clock.systemDefaultZone()),
-							mh).menu();
+									new BorrowerDaoImpl(connection), clock),
+							mh, clock).menu();
 					continue;
 				case "2":
 					new LibrarianMenu(

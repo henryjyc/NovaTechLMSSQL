@@ -1,6 +1,7 @@
 package com.lms.menu;
 
 import java.sql.SQLException;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public final class BorrowerMenu {
 	 * Logger for logging unexpected errors.
 	 */
 	private static final Logger LOGGER = Logger.getLogger(BorrowerMenu.class.getName());
+	/**
+	 * The clock to get "the current time" from.
+	 */
+	private final Clock clock;
 
 	/**
 	 * To initialize the menu, the caller must provide the service class and the
@@ -43,9 +48,11 @@ public final class BorrowerMenu {
 	 * @param service    the service class to interact with the database
 	 * @param menuHelper the helper to interact with the user
 	 */
-	public BorrowerMenu(final BorrowerService service, final MenuHelper menuHelper) {
+	public BorrowerMenu(final BorrowerService service, final MenuHelper menuHelper,
+			final Clock clock) {
 		this.service = service;
 		mh = menuHelper;
+		this.clock = clock;
 	}
 
 	/**
@@ -102,9 +109,8 @@ public final class BorrowerMenu {
 			return;
 		}
 		try {
-			// FIXME: Take a Clock instance to pass to now()
-			service.borrowBook(borrower, book, branch, LocalDateTime.now(),
-					LocalDate.now().plusWeeks(1));
+			service.borrowBook(borrower, book, branch, LocalDateTime.now(clock),
+					LocalDate.now(clock).plusWeeks(1));
 		} catch (final TransactionException except) {
 			// TODO: Handle less severely if row already exists for that key
 			mh.println("An error occurred while creating the loan record.");
