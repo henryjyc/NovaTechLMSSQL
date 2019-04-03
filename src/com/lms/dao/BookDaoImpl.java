@@ -17,10 +17,6 @@ public final class BookDaoImpl implements BookDao {
 	private final PreparedStatement deleteStatement;
 	private final PreparedStatement findStatement;
 	private final PreparedStatement getAllStatement;
-	private final PreparedStatement findAuthorStatement;
-	private final PreparedStatement findPublisherStatement;
-	private final PreparedStatement createAuthorStatement;
-	private final PreparedStatement createPublisherStatement;
 	private final PreparedStatement createBookStatement;
 
 	public BookDaoImpl(final Connection dbConnection) throws SQLException {
@@ -32,14 +28,6 @@ public final class BookDaoImpl implements BookDao {
 				"SELECT * FROM `tbl_book` INNER JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` WHERE `tbl_book`.`bookId` = ?");
 		getAllStatement = dbConnection.prepareStatement(
 				"SELECT * FROM `tbl_book` INNER JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId`");
-		findAuthorStatement = dbConnection
-				.prepareStatement("SELECT * FROM `tbl_author` WHERE `authorId` = ?");
-		findPublisherStatement = dbConnection.prepareStatement(
-				"SELECT * FROM `tbl_publisher` WHERE `publisherId` = ?");
-		createAuthorStatement = dbConnection
-				.prepareStatement("INSERT INTO `tbl_author` (`authorName`) VALUES(?)");
-		createPublisherStatement = dbConnection.prepareStatement(
-				"INSERT INTO `tbl_publisher` (`publisherName`, `publisherAddress`, `publisherPhone`) VALUES(?, ?, ?)");
 		createBookStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_book` (`title`, `authId`, `pubId`) VALUES(?, ?, ?)");
 	}
