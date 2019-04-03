@@ -169,6 +169,8 @@ public final class LibrarianMenu {
 			}
 			if (chosenBranch.isPresent() && chosenBranch.get().isPresent()) {
 				manageBranch(chosenBranch.get().get());
+			} else {
+				break;
 			}
 		}
 	}
