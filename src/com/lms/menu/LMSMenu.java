@@ -79,14 +79,14 @@ public final class LMSMenu {
 									new BorrowerDaoImpl(connection),
 									Clock.systemDefaultZone()),
 							mh).menu();
-					return;
+					continue;
 				case "2":
 					new LibrarianMenu(
 							new LibrarianServiceImpl(new LibraryBranchDaoImpl(connection),
 									new BookDaoImpl(connection),
 									new CopiesDaoImpl(connection)),
 							mh).menu();
-					return;
+					continue;
 				case "3":
 					new AdministratorMenu(new AdministratorServiceImpl(
 							new LibraryBranchDaoImpl(connection),
@@ -94,7 +94,7 @@ public final class LMSMenu {
 							new PublisherDaoImpl(connection),
 							new BookLoansDaoImpl(connection),
 							new BorrowerDaoImpl(connection)), mh).menu();
-					return;
+					continue;
 				default:
 					mh.println("Please select role, or type 0 to quit");
 					break;
