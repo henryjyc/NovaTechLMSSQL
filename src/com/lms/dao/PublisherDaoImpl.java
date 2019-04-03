@@ -90,7 +90,7 @@ public final class PublisherDaoImpl implements PublisherDao {
 	public Publisher get(final int id) throws SQLException {
 		synchronized (findStatement) {
 			findStatement.setInt(1, id);
-			try (final ResultSet result = findStatement.executeQuery()) {
+			try (ResultSet result = findStatement.executeQuery()) {
 				Publisher retval = null;
 				while (result.next()) {
 					if (retval == null) {
@@ -112,7 +112,7 @@ public final class PublisherDaoImpl implements PublisherDao {
 	public List<Publisher> getAll() throws SQLException {
 		final List<Publisher> retval = new ArrayList<>();
 		synchronized (getAllStatement) {
-			try (final ResultSet result = getAllStatement.executeQuery()) {
+			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					retval.add(new Publisher(result.getInt("publisherId"),
 							result.getString("publisherName"),
@@ -142,7 +142,7 @@ public final class PublisherDaoImpl implements PublisherDao {
 				createStatement.setString(3, publisherPhone);
 			}
 			createStatement.executeUpdate();
-			try (final ResultSet result = createStatement.getGeneratedKeys()) {
+			try (ResultSet result = createStatement.getGeneratedKeys()) {
 				result.next();
 				return new Publisher(result.getInt("publisherId"), publisherName,
 						publisherAddress, publisherPhone);

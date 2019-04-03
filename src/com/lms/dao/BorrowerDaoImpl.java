@@ -110,7 +110,7 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 	public List<Borrower> getAll() throws SQLException {
 		final List<Borrower> retval = new ArrayList<>();
 		synchronized (getAllStatement) {
-			try (final ResultSet result = getAllStatement.executeQuery()) {
+			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					retval.add(new Borrower(result.getInt("cardNo"),
 							result.getString("name"),
@@ -138,7 +138,7 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 				createStatement.setString(3, borrowerPhone);
 			}
 			createStatement.executeUpdate();
-			try (final ResultSet result = createStatement.getGeneratedKeys()) {
+			try (ResultSet result = createStatement.getGeneratedKeys()) {
 				result.next();
 				return new Borrower(result.getInt("cardNo"), borrowerName,
 						borrowerAddress, borrowerPhone);

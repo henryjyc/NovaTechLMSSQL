@@ -130,7 +130,7 @@ public final class BookDaoImpl implements BookDao {
 	public List<Book> getAll() throws SQLException {
 		final List<Book> retval = new ArrayList<>();
 		synchronized (getAllStatement) {
-			try (final ResultSet result = getAllStatement.executeQuery()) {
+			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					Author author;
 					final int authorId = result.getInt("authorId");
@@ -173,7 +173,7 @@ public final class BookDaoImpl implements BookDao {
 				createBookStatement.setInt(3, publisher.getId());
 			}
 			createBookStatement.executeUpdate();
-			try (final ResultSet result = createBookStatement.getGeneratedKeys()) {
+			try (ResultSet result = createBookStatement.getGeneratedKeys()) {
 				result.next();
 				return new Book(result.getInt("authorId"), title, author, publisher);
 			}

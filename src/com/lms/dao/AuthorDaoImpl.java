@@ -96,7 +96,7 @@ public final class AuthorDaoImpl implements AuthorDao {
 	public List<Author> getAll() throws SQLException {
 		final List<Author> retval = new ArrayList<>();
 		synchronized (getAllStatement) {
-			try (final ResultSet result = getAllStatement.executeQuery()) {
+			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					retval.add(new Author(result.getInt("authorId"),
 							result.getString("authorName")));
@@ -111,7 +111,7 @@ public final class AuthorDaoImpl implements AuthorDao {
 		synchronized (createStatement) {
 			createStatement.setString(1, authorName);
 			createStatement.executeUpdate();
-			try (final ResultSet result = createStatement.getGeneratedKeys()) {
+			try (ResultSet result = createStatement.getGeneratedKeys()) {
 				result.next();
 				return new Author(result.getInt("authorId"), authorName);
 			}

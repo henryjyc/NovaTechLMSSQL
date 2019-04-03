@@ -129,7 +129,7 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 	public List<Loan> getAll() throws SQLException {
 		final List<Loan> retval = new ArrayList<>();
 		synchronized (getAllStatement) {
-			try (final ResultSet result = getAllStatement.executeQuery()) {
+			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					final int authorId = result.getInt("authorId");
 					final Author author;

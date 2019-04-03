@@ -81,7 +81,7 @@ public final class CopiesDaoImpl implements CopiesDao {
 		synchronized (findStatement) {
 			findStatement.setInt(1, book.getId());
 			findStatement.setInt(2, branch.getId());
-			try (final ResultSet result = findStatement.executeQuery()) {
+			try (ResultSet result = findStatement.executeQuery()) {
 				OptionalInt copies = OptionalInt.empty();
 				while (result.next()) {
 					if (copies.isPresent()) {
@@ -179,7 +179,7 @@ public final class CopiesDaoImpl implements CopiesDao {
 	public Map<Branch, Map<Book, Integer>> getAllCopies() throws SQLException {
 		final Map<Branch, Map<Book, Integer>> retval = new HashMap<>();
 		synchronized (getAllStatement) {
-			try (final ResultSet result = getAllStatement.executeQuery()) {
+			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					final Branch branch = new Branch(result.getInt("branchId"),
 							result.getString("branchName"),

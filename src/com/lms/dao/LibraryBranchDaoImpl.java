@@ -112,7 +112,7 @@ public final class LibraryBranchDaoImpl implements LibraryBranchDao {
 	public List<Branch> getAll() throws SQLException {
 		final List<Branch> retval = new ArrayList<>();
 		synchronized (getAllStatement) {
-			try (final ResultSet result = getAllStatement.executeQuery()) {
+			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					retval.add(new Branch(result.getInt("branchId"),
 							Optional.ofNullable(result.getString("branchName"))
@@ -140,7 +140,7 @@ public final class LibraryBranchDaoImpl implements LibraryBranchDao {
 				createStatement.setString(2, branchAddress);
 			}
 			createStatement.executeUpdate();
-			try (final ResultSet result = createStatement.getGeneratedKeys()) {
+			try (ResultSet result = createStatement.getGeneratedKeys()) {
 				result.next();
 				return new Branch(result.getInt("branchId"), branchName, branchAddress);
 			}
