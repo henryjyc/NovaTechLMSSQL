@@ -3,6 +3,7 @@ package com.lms.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An object representing the loan of a book. Unlike every other model class,
@@ -140,8 +141,12 @@ public class Loan {
 
 	@Override
 	public String toString() {
-		return "Loan: " + book.getTitle() + " borrowed from " + branch.getName() + " by " +
-	Objects.toString(borrower.getName(), Integer.toString(borrower.getCardNo())) + " checkout on " + Objects.toString(dateOut, "No checkout Date") +
-	" and due on " + Objects.toString(dueDate, "Never!");
+		return String.format("Loan: %s by %s borrowed from %s by %s on %s, due %s",
+				book.getTitle(),
+				Optional.ofNullable(book.getAuthor()).map(Author::getName)
+						.orElse("an unknown author"),
+				branch.getName(), borrower.getName(),
+				Objects.toString(dateOut, "an unknown date"),
+				Objects.toString(dueDate, "never"));
 	}
 }
