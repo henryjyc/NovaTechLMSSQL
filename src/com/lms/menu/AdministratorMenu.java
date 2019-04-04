@@ -1,6 +1,7 @@
 package com.lms.menu;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
@@ -71,7 +72,9 @@ public final class AdministratorMenu {
 				loan.getBook().getTitle(), loan.getBorrower().getName(),
 				loan.getDateOut().toLocalDate().toString(), loan.getDueDate().toString());
 		try {
-			loan.setDueDate(LocalDate.parse(mh.getString("New due date (YYYY-MM-DD):")));
+			loan.setDueDate(
+					LocalDate.parse(mh.getString("New due date (YYYY-MM-DD):"),
+							DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 //			service.updateLoan(loan);
 			service.overrideDueDateForLoan(loan.getBook(), loan.getBorrower(),
 					loan.getBranch(), loan.getDueDate());
