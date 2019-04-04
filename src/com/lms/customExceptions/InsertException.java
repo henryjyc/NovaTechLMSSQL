@@ -15,7 +15,7 @@ public class InsertException extends TransactionException {
 	 *
 	 * @param errorMessage the exception message
 	 */
-	public InsertException(String errorMessage) {
+	public InsertException(final String errorMessage) {
 		super(errorMessage);
 	}
 }

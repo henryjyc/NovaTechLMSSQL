@@ -15,7 +15,7 @@ public class UpdateException extends TransactionException {
 	 *
 	 * @param errorMessage the exception message
 	 */
-	public UpdateException(String errorMessage) {
+	public UpdateException(final String errorMessage) {
 		super(errorMessage);
 	}
 }

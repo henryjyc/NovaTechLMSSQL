@@ -15,7 +15,7 @@ public class TransactionException extends Exception {
 	 * Constructor taking only the message.
 	 * @param errorMessage the exception message
 	 */
-	protected TransactionException(String errorMessage) {
+	protected TransactionException(final String errorMessage) {
 		super(errorMessage);
 	}
 
@@ -24,7 +24,7 @@ public class TransactionException extends Exception {
 	 * @param errorMessage the exception message
 	 * @param cause the exception that caused this one to be thrown
 	 */
-	protected TransactionException(String errorMessage, Throwable cause) {
+	protected TransactionException(final String errorMessage, final Throwable cause) {
 		super(errorMessage, cause);
 	}
 }

@@ -15,7 +15,7 @@ public class DeleteException extends TransactionException {
 	 *
 	 * @param errorMessage the exception message
 	 */
-	public DeleteException(String errorMessage) {
+	public DeleteException(final String errorMessage) {
 		super(errorMessage);
 	}
 }

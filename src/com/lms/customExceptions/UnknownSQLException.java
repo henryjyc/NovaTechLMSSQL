@@ -16,7 +16,7 @@ public class UnknownSQLException extends TransactionException {
 	 *
 	 * @param errorMessage the exception message
 	 */
-	public UnknownSQLException(String errorMessage, Throwable cause) {
+	public UnknownSQLException(final String errorMessage, final Throwable cause) {
 		super(errorMessage, cause);
 	}
 }
