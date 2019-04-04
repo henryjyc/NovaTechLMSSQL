@@ -1,8 +1,20 @@
 package com.lms.customExceptions;
 
+/**
+ * An exception class to report the failure of a 'delete' operation from the
+ * service layer to the application layer.
+ *
+ * @author Salem Ozaki
+ * @author Jonathan Lovelace
+ */
 @SuppressWarnings("serial")
 public class DeleteException extends TransactionException {
-
+	/**
+	 * To throw an instance of this exception class, the caller must supply the
+	 * exception message.
+	 *
+	 * @param errorMessage the exception message
+	 */
 	public DeleteException(String errorMessage) {
 		super(errorMessage);
 	}
