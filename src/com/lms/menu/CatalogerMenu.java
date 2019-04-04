@@ -2,7 +2,6 @@ package com.lms.menu;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import com.lms.customExceptions.TransactionException;
 import com.lms.model.Author;
@@ -24,11 +23,6 @@ public final class CatalogerMenu {
 	 * The helper we use for interacting with the user.
 	 */
 	private final MenuHelper mh;
-	/**
-	 * A logger to record unexpected errors.
-	 */
-	private static final Logger LOGGER = Logger.getLogger(CatalogerMenu.class.getName());
-
 	/**
 	 * To initialize the menu, the caller must provide I/O streams, the database
 	 * connection, and the service class. Note that the caller is responsible for

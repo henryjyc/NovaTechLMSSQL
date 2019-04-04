@@ -3,7 +3,6 @@ package com.lms.menu;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import com.lms.customExceptions.TransactionException;
 import com.lms.model.Author;
@@ -25,12 +24,6 @@ public final class AdministratorMenu {
 	 * The helper we use for interacting with the user.
 	 */
 	private final MenuHelper mh;
-	/**
-	 * Logger for logging unexpected errors.
-	 */
-	private static final Logger LOGGER = Logger
-			.getLogger(AdministratorMenu.class.getName());
-
 	/**
 	 * To initialize the menu, the caller must provide the service instance and the
 	 * menu I/O helper.
