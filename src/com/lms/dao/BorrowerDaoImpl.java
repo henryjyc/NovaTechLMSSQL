@@ -61,7 +61,7 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 		createStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_borrower` (`name`, `address`, `phone`) VALUES (?, ?, ?)");
 		findCreatedStatement = dbConnection.prepareStatement(
-				"SELECT `cardNo` FROM `tbl_borrower` WHERE `name` = ? AND `address` = ? AND `phone` = ? ORDER BY `cardNo` DESC LIMIT 1");
+				"SELECT `cardNo` FROM `tbl_borrower` WHERE `name` = ? ORDER BY `cardNo` DESC LIMIT 1");
 	}
 
 	@Override
@@ -136,17 +136,13 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 			findCreatedStatement.setString(1, borrowerName);
 			if (borrowerAddress.isEmpty()) {
 				createStatement.setNull(2, Types.VARCHAR);
-				findCreatedStatement.setNull(2, Types.VARCHAR);
 			} else {
 				createStatement.setString(2, borrowerAddress);
-				findCreatedStatement.setString(2, borrowerAddress);
 			}
 			if (borrowerPhone.isEmpty()) {
 				createStatement.setNull(3, Types.VARCHAR);
-				findCreatedStatement.setNull(3, Types.VARCHAR);
 			} else {
 				createStatement.setString(3, borrowerPhone);
-				findCreatedStatement.setString(3, borrowerPhone);
 			}
 			createStatement.executeUpdate();
 			try (ResultSet result = findCreatedStatement.executeQuery()) {

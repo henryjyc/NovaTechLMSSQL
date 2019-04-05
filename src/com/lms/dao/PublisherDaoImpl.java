@@ -63,7 +63,7 @@ public final class PublisherDaoImpl implements PublisherDao {
 		createStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_publisher` (`publisherName`, `publisherAddress`, `publisherPhone`) VALUES (?, ?, ?)");
 		findCreatedStatement = dbConnection.prepareStatement(
-				"SELECT `publisherId` FROM `tbl_publisher` WHERE `publisherName` = ? AND `publisherAddress` = ? AND `publisherPhone` = ? ORDER BY `publisherId` DESC LIMIT 1");
+				"SELECT `publisherId` FROM `tbl_publisher` WHERE `publisherName` = ? ORDER BY `publisherId` DESC LIMIT 1");
 	}
 
 	@Override
@@ -144,17 +144,13 @@ public final class PublisherDaoImpl implements PublisherDao {
 			findCreatedStatement.setString(1, publisherName);
 			if (publisherAddress.isEmpty()) {
 				createStatement.setNull(2, Types.VARCHAR);
-				findCreatedStatement.setNull(2, Types.VARCHAR);
 			} else {
 				createStatement.setString(2, publisherAddress);
-				findCreatedStatement.setString(2, publisherAddress);
 			}
 			if (publisherPhone.isEmpty()) {
 				createStatement.setNull(3, Types.VARCHAR);
-				findCreatedStatement.setNull(3, Types.VARCHAR);
 			} else {
 				createStatement.setString(3, publisherPhone);
-				findCreatedStatement.setString(3, publisherPhone);
 			}
 			createStatement.executeUpdate();
 			try (ResultSet result = findCreatedStatement.executeQuery()) {

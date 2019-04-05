@@ -30,6 +30,7 @@ public final class InMemoryDBFactory {
 	 */
 	public static Connection getConnection(final String database)
 			throws SQLException, IOException {
+		// To log queries to stdout, add ";TRACE_LEVEL_SYSTEM_OUT=3" to initialization string.
 		final Connection retval = DriverManager
 				.getConnection(String.format("jdbc:h2:mem:%s;mode=mysql", database));
 		try (Statement statement = retval.createStatement();

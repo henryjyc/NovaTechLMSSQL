@@ -64,7 +64,7 @@ public final class BookDaoImpl implements BookDao {
 		createBookStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_book` (`title`, `authId`, `pubId`) VALUES(?, ?, ?)");
 		findCreatedStatement = dbConnection.prepareStatement(
-				"SELECT `bookId` FROM `tbl_book` WHERE `title` = ? AND `authId` = ? AND `pubId` = ? ORDER BY `bookId` DESC LIMIT 1");
+				"SELECT `bookId` FROM `tbl_book` WHERE `title` = ? ORDER BY `bookId` DESC LIMIT 1");
 	}
 
 	@Override
@@ -170,18 +170,14 @@ public final class BookDaoImpl implements BookDao {
 			createBookStatement.setString(1, title);
 			findCreatedStatement.setString(1, title);
 			if (author == null) {
-				createBookStatement.setNull(2, Types.VARCHAR);
-				findCreatedStatement.setNull(2, Types.VARCHAR);
+				createBookStatement.setNull(2, Types.INTEGER);
 			} else {
 				createBookStatement.setInt(2, author.getId());
-				findCreatedStatement.setInt(2, author.getId());
 			}
 			if (publisher == null) {
-				createBookStatement.setNull(3, Types.VARCHAR);
-				findCreatedStatement.setNull(3, Types.VARCHAR);
+				createBookStatement.setNull(3, Types.INTEGER);
 			} else {
 				createBookStatement.setInt(3, publisher.getId());
-				findCreatedStatement.setInt(3, publisher.getId());
 			}
 			createBookStatement.executeUpdate();
 			try (ResultSet result = findCreatedStatement.executeQuery()) {

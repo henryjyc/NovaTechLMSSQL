@@ -63,7 +63,7 @@ public final class LibraryBranchDaoImpl implements LibraryBranchDao {
 		createStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_library_branch` (`branchName`, `branchAddress`) VALUES (?, ?)");
 		findCreatedStatement = dbConnection.prepareStatement(
-				"SELECT `branchId` FROM `tbl_library_branch` WHERE `branchName` = ? AND `branchAddress` = ? ORDER BY `branchId` DESC LIMIT 1");
+				"SELECT `branchId` FROM `tbl_library_branch` ORDER BY `branchId` DESC LIMIT 1");
 	}
 
 	@Override
@@ -138,17 +138,13 @@ public final class LibraryBranchDaoImpl implements LibraryBranchDao {
 		synchronized (createStatement) {
 			if (branchName.isEmpty()) {
 				createStatement.setNull(1, Types.VARCHAR);
-				findCreatedStatement.setNull(1, Types.VARCHAR);
 			} else {
 				createStatement.setString(1, branchName);
-				findCreatedStatement.setString(1, branchName);
 			}
 			if (branchAddress.isEmpty()) {
 				createStatement.setNull(2, Types.VARCHAR);
-				findCreatedStatement.setNull(2, Types.VARCHAR);
 			} else {
 				createStatement.setString(2, branchAddress);
-				findCreatedStatement.setString(2, branchAddress);
 			}
 			createStatement.executeUpdate();
 			try (ResultSet result = findCreatedStatement.executeQuery()) {
