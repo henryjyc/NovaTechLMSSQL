@@ -179,8 +179,10 @@ public final class CopiesDaoImpl implements CopiesDao {
 			try (ResultSet result = findByBookStatement.executeQuery()) {
 				while (result.next()) {
 					final Branch branch = new Branch(result.getInt("branchId"),
-							result.getString("branchName"),
-							result.getString("branchAddress"));
+							Optional.ofNullable(result.getString("branchName"))
+									.orElse(""),
+							Optional.ofNullable(result.getString("branchAddress"))
+									.orElse(""));
 					retval.put(branch, result.getInt(N_COPIES_FIELD));
 				}
 			}
@@ -195,8 +197,10 @@ public final class CopiesDaoImpl implements CopiesDao {
 			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					final Branch branch = new Branch(result.getInt("branchId"),
-							result.getString("branchName"),
-							result.getString("branchAddress"));
+							Optional.ofNullable(result.getString("branchName"))
+									.orElse(""),
+							Optional.ofNullable(result.getString("branchAddress"))
+									.orElse(""));
 					Map<Book, Integer> innerMap;
 					if (retval.containsKey(branch)) {
 						innerMap = retval.get(branch);

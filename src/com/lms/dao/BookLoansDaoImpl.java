@@ -159,8 +159,10 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 							result.getString("name"), result.getString("address"),
 							result.getString("phone"));
 					final Branch branch = new Branch(result.getInt("branchId"),
-							result.getString("branchName"),
-							result.getString("branchAddress"));
+							Optional.ofNullable(result.getString("branchName"))
+									.orElse(""),
+							Optional.ofNullable(result.getString("branchAddress"))
+									.orElse(""));
 					retval.add(new Loan(book, borrower, branch,
 							result.getDate("dateOut").toLocalDate().atStartOfDay(),
 							result.getDate("dueDate").toLocalDate()));
