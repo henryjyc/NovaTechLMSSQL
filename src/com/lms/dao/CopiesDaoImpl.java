@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 import com.lms.model.Author;
@@ -153,8 +154,12 @@ public final class CopiesDaoImpl implements CopiesDao {
 					} else {
 						publisher = new Publisher(publisherId,
 								result.getString("publisherName"),
-								result.getString("publisherAddress"),
-								result.getString("publisherPhone"));
+								Optional.ofNullable(
+										result.getString("publisherAddress"))
+										.orElse(""),
+								Optional.ofNullable(
+										result.getString("publisherPhone"))
+										.orElse(""));
 					}
 					final Book book = new Book(result.getInt("bookId"),
 							result.getString("title"), author, publisher);
@@ -214,8 +219,12 @@ public final class CopiesDaoImpl implements CopiesDao {
 					} else {
 						publisher = new Publisher(publisherId,
 								result.getString("publisherName"),
-								result.getString("publisherAddress"),
-								result.getString("publisherPhone"));
+								Optional.ofNullable(
+										result.getString("publisherAddress"))
+										.orElse(""),
+								Optional.ofNullable(
+										result.getString("publisherPhone"))
+										.orElse(""));
 					}
 					final Book book = new Book(result.getInt("bookId"),
 							result.getString("title"), author, publisher);

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.lms.model.Author;
 import com.lms.model.Book;
@@ -118,8 +119,12 @@ public final class BookDaoImpl implements BookDao {
 						} else {
 							publisher = new Publisher(publisherId,
 									result.getString("publisherName"),
-									result.getString("publisherAddress"),
-									result.getString("publisherPhone"));
+									Optional.ofNullable(
+											result.getString("publisherAddress"))
+											.orElse(""),
+									Optional.ofNullable(
+											result.getString("publisherPhone"))
+											.orElse(""));
 						}
 						retval = new Book(id, result.getString("title"), author,
 								publisher);
@@ -152,8 +157,12 @@ public final class BookDaoImpl implements BookDao {
 					} else {
 						publisher = new Publisher(publisherId,
 								result.getString("publisherName"),
-								result.getString("publisherAddress"),
-								result.getString("publisherPhone"));
+								Optional.ofNullable(
+										result.getString("publisherAddress"))
+										.orElse(""),
+								Optional.ofNullable(
+										result.getString("publisherPhone"))
+										.orElse(""));
 					}
 					retval.add(new Book(result.getInt("bookId"),
 							result.getString("title"), author, publisher));
