@@ -1,9 +1,11 @@
 package com.lms.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -68,13 +70,23 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 
 	@Override
 	public Loan create(final Book book, final Borrower borrower, final Branch branch,
-			final LocalDateTime dateOut, final LocalDate dueDate) throws SQLException {
+			final LocalDateTime dateOut, final LocalDate dueDate)
+			throws SQLException {
 		synchronized (createStatement) {
 			createStatement.setInt(1, book.getId());
 			createStatement.setInt(2, branch.getId());
 			createStatement.setInt(3, borrower.getCardNo());
-			createStatement.setDate(4, java.sql.Date.valueOf(dateOut.toLocalDate()));
-			createStatement.setDate(5, java.sql.Date.valueOf(dueDate));
+			if (dateOut == null) {
+				createStatement.setNull(4, Types.DATE);
+			} else {
+				createStatement.setDate(4,
+						java.sql.Date.valueOf(dateOut.toLocalDate()));
+			}
+			if (dueDate == null) {
+				createStatement.setNull(5, Types.DATE);
+			} else {
+				createStatement.setDate(5, java.sql.Date.valueOf(dueDate));
+			}
 			createStatement.executeUpdate();
 		}
 		return new Loan(book, borrower, branch, dateOut, dueDate);
@@ -83,9 +95,19 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 	@Override
 	public void update(final Loan loan) throws SQLException {
 		synchronized (updateStatement) {
-			updateStatement.setDate(1,
-					java.sql.Date.valueOf(loan.getDateOut().toLocalDate()));
-			updateStatement.setDate(2, java.sql.Date.valueOf(loan.getDueDate()));
+			final LocalDateTime dateOut = loan.getDateOut();
+			if (dateOut == null) {
+				updateStatement.setNull(1, Types.DATE);
+			} else {
+				updateStatement.setDate(1,
+						java.sql.Date.valueOf(dateOut.toLocalDate()));
+			}
+			final LocalDate dueDate = loan.getDueDate();
+			if (dueDate == null) {
+				updateStatement.setNull(2, Types.DATE);
+			} else {
+				updateStatement.setDate(2, java.sql.Date.valueOf(dueDate));
+			}
 			updateStatement.setInt(3, loan.getBook().getId());
 			updateStatement.setInt(4, loan.getBranch().getId());
 			updateStatement.setInt(5, loan.getBorrower().getCardNo());
@@ -115,8 +137,11 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 				while (result.next()) {
 					if (retval == null) {
 						retval = new Loan(book, borrower, branch,
-								result.getDate("dateOut").toLocalDate().atStartOfDay(),
-								result.getDate("dueDate").toLocalDate());
+								Optional.ofNullable(result.getDate("dateOut"))
+										.map(Date::toLocalDate)
+										.map(LocalDate::atStartOfDay).orElse(null),
+								Optional.ofNullable(result.getDate("dueDate"))
+										.map(Date::toLocalDate).orElse(null));
 					} else {
 						throw new IllegalStateException("Multiple results for key");
 					}
@@ -167,8 +192,11 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 							Optional.ofNullable(result.getString("branchAddress"))
 									.orElse(""));
 					retval.add(new Loan(book, borrower, branch,
-							result.getDate("dateOut").toLocalDate().atStartOfDay(),
-							result.getDate("dueDate").toLocalDate()));
+							Optional.ofNullable(result.getDate("dateOut"))
+									.map(Date::toLocalDate)
+									.map(LocalDate::atStartOfDay).orElse(null),
+							Optional.ofNullable(result.getDate("dueDate"))
+									.map(Date::toLocalDate).orElse(null)));
 				}
 			}
 			return retval;
