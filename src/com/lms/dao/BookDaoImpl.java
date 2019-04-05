@@ -58,9 +58,9 @@ public final class BookDaoImpl implements BookDao {
 		deleteStatement = dbConnection
 				.prepareStatement("DELETE FROM `tbl_book` WHERE `bookID` = ?");
 		findStatement = dbConnection.prepareStatement(
-				"SELECT * FROM `tbl_book` INNER JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` WHERE `tbl_book`.`bookId` = ?");
+				"SELECT * FROM `tbl_book` LEFT JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` LEFT JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` WHERE `tbl_book`.`bookId` = ?");
 		getAllStatement = dbConnection.prepareStatement(
-				"SELECT * FROM `tbl_book` INNER JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId`");
+				"SELECT * FROM `tbl_book` LEFT JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` LEFT JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId`");
 		createBookStatement = dbConnection.prepareStatement(
 				"INSERT INTO `tbl_book` (`title`, `authId`, `pubId`) VALUES(?, ?, ?)");
 		findCreatedStatement = dbConnection.prepareStatement(

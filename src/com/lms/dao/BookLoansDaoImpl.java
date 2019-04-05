@@ -62,7 +62,7 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 		findStatement = dbConnection.prepareStatement(
 				"SELECT * FROM `tbl_book_loans` WhERE `bookId` = ? AND `branchId` = ? AND `cardNo` = ?");
 		getAllStatement = dbConnection.prepareStatement(
-				"SELECT * FROM `tbl_book_loans` INNER JOIN `tbl_book` ON `tbl_book`.`bookId` = `tbl_book_loans`.`bookId` INNER JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` INNER JOIN `tbl_library_branch` ON `tbl_book_loans`.`branchId` = `tbl_library_branch`.`branchId` INNER JOIN `tbl_borrower` ON `tbl_borrower`.`cardNo` = `tbl_book_loans`.`cardNo`");
+				"SELECT * FROM `tbl_book_loans` INNER JOIN `tbl_book` ON `tbl_book`.`bookId` = `tbl_book_loans`.`bookId` LEFT JOIN `tbl_author` ON `tbl_book`.`authId` = `tbl_author`.`authorId` LEFT JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` INNER JOIN `tbl_library_branch` ON `tbl_book_loans`.`branchId` = `tbl_library_branch`.`branchId` INNER JOIN `tbl_borrower` ON `tbl_borrower`.`cardNo` = `tbl_book_loans`.`cardNo`");
 	}
 
 	@Override

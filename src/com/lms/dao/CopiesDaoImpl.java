@@ -66,7 +66,7 @@ public final class CopiesDaoImpl implements CopiesDao {
 	 */
 	public CopiesDaoImpl(final Connection dbConnection) throws SQLException {
 		getAllStatement = dbConnection.prepareStatement(
-				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_library_branch` ON `tbl_book_copies`.`branchId` = `tbl_library_branch`.`branchId` INNER JOIN `tbl_book` ON `tbl_book_copies`.`bookId` = `tbl_book`.`bookId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` INNER JOIN `tbl_author` ON `tbl_author`.`authorId` = `tbl_book`.`authId`");
+				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_library_branch` ON `tbl_book_copies`.`branchId` = `tbl_library_branch`.`branchId` INNER JOIN `tbl_book` ON `tbl_book_copies`.`bookId` = `tbl_book`.`bookId` LEFT JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` LEFT JOIN `tbl_author` ON `tbl_author`.`authorId` = `tbl_book`.`authId`");
 		findStatement = dbConnection.prepareStatement(
 				"SELECT * FROM `tbl_book_copies` WHERE `bookId` = ? AND `branchId` = ?");
 		insertStatement = dbConnection.prepareStatement(
@@ -74,7 +74,7 @@ public final class CopiesDaoImpl implements CopiesDao {
 		updateStatement = dbConnection.prepareStatement(
 				"UPDATE `tbl_book_copies` SET `noOfCopies` = ? WHERE `bookId` = ? AND `branchId` = ?");
 		findByBranchStatement = dbConnection.prepareStatement(
-				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_book` ON `tbl_book_copies`.`bookId` = `tbl_book`.`bookId` INNER JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` INNER JOIN `tbl_author` ON `tbl_author`.`authorId` = `tbl_book`.`authId` WHERE `branchId` = ?");
+				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_book` ON `tbl_book_copies`.`bookId` = `tbl_book`.`bookId` LEFT JOIN `tbl_publisher` ON `tbl_book`.`pubId` = `tbl_publisher`.`publisherId` LEFT JOIN `tbl_author` ON `tbl_author`.`authorId` = `tbl_book`.`authId` WHERE `branchId` = ?");
 		findByBookStatement = dbConnection.prepareStatement(
 				"SELECT * FROM `tbl_book_copies` INNER JOIN `tbl_library_branch` ON `tbl_book_copies`.`branchId` = `tbl_library_branch`.`branchId` WHERE `bookId` = ?");
 		deleteStatement = dbConnection.prepareStatement(
