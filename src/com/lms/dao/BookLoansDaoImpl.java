@@ -156,8 +156,11 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 					final Book book = new Book(result.getInt("bookId"),
 							result.getString("title"), author, publisher);
 					final Borrower borrower = new Borrower(result.getInt("cardNo"),
-							result.getString("name"), result.getString("address"),
-							result.getString("phone"));
+							Optional.ofNullable(result.getString("name")).orElse(""),
+							Optional.ofNullable(result.getString("address"))
+									.orElse(""),
+							Optional.ofNullable(result.getString("phone"))
+									.orElse(""));
 					final Branch branch = new Branch(result.getInt("branchId"),
 							Optional.ofNullable(result.getString("branchName"))
 									.orElse(""),

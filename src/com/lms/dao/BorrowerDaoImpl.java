@@ -99,8 +99,11 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 				Borrower retval = null;
 				while (result.next()) {
 					if (retval == null) {
-						retval = new Borrower(id, result.getString("name"), Optional
-								.ofNullable(result.getString("address")).orElse(""),
+						retval = new Borrower(id,
+								Optional.ofNullable(result.getString("name"))
+										.orElse(""),
+								Optional.ofNullable(result.getString("address"))
+										.orElse(""),
 								Optional.ofNullable(result.getString("phone"))
 										.orElse(""));
 					} else {
@@ -119,9 +122,11 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 			try (ResultSet result = getAllStatement.executeQuery()) {
 				while (result.next()) {
 					retval.add(new Borrower(result.getInt("cardNo"),
-							result.getString("name"),
-							Optional.ofNullable(result.getString("address")).orElse(""),
-							Optional.ofNullable(result.getString("phone")).orElse("")));
+							Optional.ofNullable(result.getString("name")).orElse(""),
+							Optional.ofNullable(result.getString("address"))
+									.orElse(""),
+							Optional.ofNullable(result.getString("phone"))
+									.orElse("")));
 				}
 			}
 		}
