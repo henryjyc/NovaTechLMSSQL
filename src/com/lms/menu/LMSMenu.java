@@ -90,4 +90,13 @@ public final class LMSMenu {
 					"An unrecoverable error occurred while reading database configuration parameters.");
 		}
 	}
+	/**
+	 * Start the application.
+	 * @param args ignored
+	 */
+	public static void main(final String... args) {
+		new LMSMenu(new InputStreamReader(System.in),
+				new OutputStreamWriter(System.out), Clock.systemDefaultZone())
+						.chooseRole();
+	}
 }
