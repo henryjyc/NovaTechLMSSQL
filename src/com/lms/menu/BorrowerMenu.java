@@ -102,8 +102,10 @@ public final class BorrowerMenu {
 			return;
 		}
 		try {
-			service.borrowBook(borrower, book, branch, LocalDateTime.now(clock),
-					LocalDate.now(clock).plusWeeks(1));
+			if (service.borrowBook(borrower, book, branch, LocalDateTime.now(clock),
+					LocalDate.now(clock).plusWeeks(1)) == null) {
+				mh.println("You already have that book out from that branch.");
+			}
 			service.commit();
 		} catch (final TransactionException except) {
 			// TODO: Handle less severely if row already exists for that key

@@ -138,7 +138,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			final Branch branch, final LocalDateTime dateOut,
 			final LocalDate dueDate) throws TransactionException {
 		try {
-			return loanDao.create(book, borrower, branch, dateOut, dueDate);
+			if (loanDao.get(book, borrower, branch) == null) {
+				return loanDao.create(book, borrower, branch, dateOut, dueDate);
+			} else {
+				return null; // TODO: Add getLoan() method to interface
+			}
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while creating a loan record", except);
 			try {
