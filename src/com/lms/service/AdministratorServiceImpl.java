@@ -273,18 +273,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 
 	@Override
 	public Publisher createPublisher(final String name) throws TransactionException {
-		// TODO: Just delegate to this.createPublisher(name, "", "");
-		try {
-			return publisherDao.create(name, "", "");
-		} catch (final SQLException except) {
-			LOGGER.log(Level.SEVERE, "SQL error while creating a publisher", except);
-			try {
-				rollbackHandle.run();
-			} catch (final Exception inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
-			}
-			throw new InsertException("Creating a publisher failed");
-		}
+		return createPublisher(name, "", "");
 	}
 
 	@Override
