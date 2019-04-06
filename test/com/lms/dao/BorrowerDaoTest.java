@@ -54,7 +54,7 @@ class BorrowerDaoTest {
 	}
 
 	@Test
-	final void testCreate() throws SQLException {
+	public final void testCreate() throws SQLException {
 		final Borrower expected = new Borrower(1, "borrower name",
 				"borrower address", "borrower phone");
 		final Borrower borrower = testee.create("borrower name", "borrower address",
@@ -72,7 +72,7 @@ class BorrowerDaoTest {
 	}
 
 	@Test
-	final void testUpdate() throws SQLException {
+	public final void testUpdate() throws SQLException {
 		final Borrower before = new Borrower(1, "before name", "before address",
 				"before phone");
 		final Borrower middle = new Borrower(1, "middle name", "before address",
@@ -96,7 +96,7 @@ class BorrowerDaoTest {
 	}
 
 	@Test
-	final void testDelete() throws SQLException {
+	public final void testDelete() throws SQLException {
 		try (PreparedStatement statement = db.prepareStatement(
 				"INSERT INTO `tbl_borrower` (`name`, `address`, `phone`) VALUES (?, NULL, NULL)")) {
 			for (final String name : Arrays.asList("first borrower",
@@ -116,7 +116,7 @@ class BorrowerDaoTest {
 	}
 
 	@Test
-	final void testGet() throws SQLException {
+	public final void testGet() throws SQLException {
 		try (PreparedStatement statement = db.prepareStatement(
 				"INSERT INTO `tbl_borrower` (`name`, `address`, `phone`) VALUES (?, ?, ?)")) {
 			statement.setString(1, "borrower one");
@@ -142,7 +142,7 @@ class BorrowerDaoTest {
 	}
 
 	@Test
-	final void testGetAll() throws SQLException {
+	public final void testGetAll() throws SQLException {
 		try (PreparedStatement statement = db.prepareStatement(
 				"INSERT INTO `tbl_borrower` (`name`, `address`, `phone`) VALUES (?, ?, ?)")) {
 			statement.setString(1, "borrower one");
@@ -173,7 +173,7 @@ class BorrowerDaoTest {
 	 * @throws SQLException if something goes very wrong
 	 */
 	@Test
-	public void testDeleteLoansCascade() throws SQLException {
+	public final void testDeleteLoansCascade() throws SQLException {
 		final Borrower toRemove = testee.create("borrower to remove", "", "");
 		final Borrower toKeep = testee.create("borrower to keep", "", "");
 		final BookLoansDao loansDao = new BookLoansDaoImpl(db);

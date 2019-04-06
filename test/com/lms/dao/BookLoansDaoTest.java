@@ -53,7 +53,7 @@ class BookLoansDaoTest {
 	}
 
 	@Test
-	final void testCreate() throws SQLException {
+	public final void testCreate() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final BorrowerDao borrowerDao = new BorrowerDaoImpl(db);
@@ -71,7 +71,7 @@ class BookLoansDaoTest {
 	}
 
 	@Test
-	final void testUpdate() throws SQLException {
+	public final void testUpdate() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final BorrowerDao borrowerDao = new BorrowerDaoImpl(db);
@@ -91,7 +91,7 @@ class BookLoansDaoTest {
 	}
 
 	@Test
-	final void testDelete() throws SQLException {
+	public final void testDelete() throws SQLException {
 		assertEquals(0, testee.getAll().size(), "Empty table before adding");
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
@@ -108,7 +108,7 @@ class BookLoansDaoTest {
 	}
 
 	@Test
-	final void testGet() throws SQLException {
+	public final void testGet() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final BorrowerDao borrowerDao = new BorrowerDaoImpl(db);
@@ -126,7 +126,7 @@ class BookLoansDaoTest {
 	}
 
 	@Test
-	final void testGetAll() throws SQLException {
+	public final void testGetAll() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final BorrowerDao borrowerDao = new BorrowerDaoImpl(db);
