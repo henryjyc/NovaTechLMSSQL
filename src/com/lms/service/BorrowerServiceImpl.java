@@ -124,7 +124,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			return branchDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE,  "SQL error while getting all branches", except);
-			// TODO: abort current transaction
+			try {
+				rollbackHandle.run();
+			} catch (final Exception inner) {
+				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+			}
 			throw new UnknownSQLException("Getting all branches failed", except);
 		}
 	}
@@ -137,7 +141,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			return loanDao.create(book, borrower, branch, dateOut, dueDate);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while creating a loan record", except);
-			// TODO: abort current transaction
+			try {
+				rollbackHandle.run();
+			} catch (final Exception inner) {
+				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+			}
 			throw new InsertException("Creating a loan failed");
 		}
 	}
@@ -149,7 +157,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			return copiesDao.getAllBranchCopies(branch);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting branch copies", except);
-			// TODO: abort current transaction
+			try {
+				rollbackHandle.run();
+			} catch (final Exception inner) {
+				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+			}
 			throw new UnknownSQLException("Getting branch copy records failed", except);
 		}
 	}
@@ -162,7 +174,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			loan = Optional.ofNullable(loanDao.get(book, borrower, branch));
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loan details", except);
-			// TODO: abort current transaction
+			try {
+				rollbackHandle.run();
+			} catch (final Exception inner) {
+				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+			}
 			throw new UnknownSQLException("Getting loan details failed", except);
 		}
 		if (loan.isPresent()) {
@@ -173,7 +189,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 					loanDao.delete(loan.get());
 				} catch (final SQLException except) {
 					LOGGER.log(Level.SEVERE, "SQL error while removing a loan record", except);
-					// TODO: abort current transaction
+					try {
+						rollbackHandle.run();
+					} catch (final Exception inner) {
+						LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+					}
 					throw new DeleteException("Removing loan record failed");
 				}
 				return true;
@@ -199,7 +219,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 					.collect(Collectors.toList());
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loan records", except);
-			// TODO: abort current transaction
+			try {
+				rollbackHandle.run();
+			} catch (final Exception inner) {
+				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+			}
 			throw new UnknownSQLException("Getting loan records failed", except);
 		}
 	}
@@ -210,7 +234,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			return borrowerDao.get(cardNo);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting borrower details", except);
-			// TODO: abort current transaction
+			try {
+				rollbackHandle.run();
+			} catch (final Exception inner) {
+				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+			}
 			throw new UnknownSQLException("Getting borrower record failed", except);
 		}
 	}

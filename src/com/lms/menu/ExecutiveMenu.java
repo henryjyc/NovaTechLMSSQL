@@ -49,6 +49,7 @@ public final class ExecutiveMenu {
 		final String address = mh.getString("Address of new branch:");
 		try {
 			service.createBranch(name, address);
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while creating the new branch record.");
 		}
@@ -84,6 +85,7 @@ public final class ExecutiveMenu {
 		}
 		try {
 			service.updateBranch(branch);
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println(
 					"An error occurred while trying to write your changes to the database.");
@@ -104,6 +106,7 @@ public final class ExecutiveMenu {
 		if (chosenBranch.isPresent() && chosenBranch.get().isPresent()) {
 			try {
 				service.deleteBranch(chosenBranch.get().get());
+				service.commit();
 			} catch (final TransactionException except) {
 				mh.println("An error occurred while removing the branch record.");
 			}
@@ -117,6 +120,7 @@ public final class ExecutiveMenu {
 			service.createBorrower(mh.getString("Name of new borrower:\t"),
 					mh.getString("Address of new borrower:\t"),
 					mh.getString("Phone # of new borrower:\t"));
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while creating the new borrower record.");
 		}
@@ -159,6 +163,7 @@ public final class ExecutiveMenu {
 		}
 		try {
 			service.updateBorrower(borrower);
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println(
 					"An error occurred while trying to write your changes to the database.");
@@ -179,6 +184,7 @@ public final class ExecutiveMenu {
 		if (chosenBorrower.isPresent() && chosenBorrower.get().isPresent()) {
 			try {
 				service.deleteBorrower(chosenBorrower.get().get());
+				service.commit();
 			} catch (final TransactionException except) {
 				mh.println("An error occurred while removing the borrower record.");
 			}

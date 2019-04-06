@@ -151,6 +151,7 @@ public final class CatalogerMenu {
 		final String title = mh.getString("Title of new book:");
 		try {
 			service.createBook(title, author.get(), publisher.get());
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while trying to add the book");
 		}
@@ -182,6 +183,7 @@ public final class CatalogerMenu {
 		}
 		try {
 			service.updateAuthor(author);
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while writing your changes to the database.");
 		}
@@ -224,6 +226,7 @@ public final class CatalogerMenu {
 		}
 		try {
 			service.updatePublisher(publisher);
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while writing your changes to the database.");
 		}
@@ -269,6 +272,7 @@ public final class CatalogerMenu {
 		}
 		try {
 			service.updateBook(book);
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while writing your changes to the database.");
 		}
@@ -290,6 +294,7 @@ public final class CatalogerMenu {
 		if (chosenBook.isPresent() && chosenBook.get().isPresent()) {
 			try {
 				service.deleteBook(chosenBook.get().get());
+				service.commit();
 			} catch (final TransactionException except) {
 				mh.println("An error occurred while removing the book.");
 			}
@@ -310,6 +315,7 @@ public final class CatalogerMenu {
 		if (chosenAuthor.isPresent() && chosenAuthor.get().isPresent()) {
 			try {
 				service.deleteAuthor(chosenAuthor.get().get());
+				service.commit();
 			} catch (final TransactionException except) {
 				mh.println("An error occurred while removing the author.");
 			}
@@ -331,6 +337,7 @@ public final class CatalogerMenu {
 		if (chosenPublisher.isPresent() && chosenPublisher.get().isPresent()) {
 			try {
 				service.deletePublisher(chosenPublisher.get().get());
+				service.commit();
 			} catch (final TransactionException except) {
 				mh.println("An error occurred while removing the publisher");
 			}
@@ -360,6 +367,7 @@ public final class CatalogerMenu {
 			case "1":
 				try {
 					addAuthor();
+					service.commit();
 				} catch (final TransactionException except) {
 					mh.println("An error occurred while trying to add the author.");
 					continue;
@@ -368,6 +376,7 @@ public final class CatalogerMenu {
 			case "2":
 				try {
 					addPublisher();
+					service.commit();
 				} catch (final TransactionException except) {
 					mh.println("An error occurred while trying to add the publisher.");
 					continue;

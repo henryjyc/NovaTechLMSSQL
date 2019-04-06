@@ -43,6 +43,7 @@ public final class InMemoryDBFactory {
 				line = schemaReader.readLine();
 			}
 		}
+		retval.setAutoCommit(false);
 		return retval;
 	}
 }

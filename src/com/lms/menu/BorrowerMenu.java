@@ -111,6 +111,7 @@ public final class BorrowerMenu {
 		try {
 			service.borrowBook(borrower, book, branch, LocalDateTime.now(clock),
 					LocalDate.now(clock).plusWeeks(1));
+			service.commit();
 		} catch (final TransactionException except) {
 			// TODO: Handle less severely if row already exists for that key
 			mh.println("An error occurred while creating the loan record.");
@@ -147,9 +148,10 @@ public final class BorrowerMenu {
 		try {
 			service.returnBook(borrower, loan.getBook(), loan.getBranch(),
 					loan.getDueDate());
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while processing your return.");
-			mh.println("Your return may not have been recorded."); // TODO: change to "has not" once we implement transactions
+			mh.println("Your return has not been recorded.");
 		}
 	}
 

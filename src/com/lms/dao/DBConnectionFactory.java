@@ -49,8 +49,10 @@ public final class DBConnectionFactory {
 		try (InputStream is = Files.newInputStream(propertiesFile)) {
 			properties.load(is);
 		}
-		return DriverManager.getConnection(properties.getProperty("url"),
+		final Connection retval = DriverManager.getConnection(properties.getProperty("url"),
 				properties.getProperty("username"),
 				properties.getProperty("password"));
+		retval.setAutoCommit(false);
+		return retval;
 	}
 }

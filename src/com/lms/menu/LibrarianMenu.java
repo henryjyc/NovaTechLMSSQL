@@ -67,6 +67,7 @@ public final class LibrarianMenu {
 		}
 		try {
 			service.updateBranch(branch);
+			service.commit();
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while writing your changes to the database.");
 		}
@@ -117,6 +118,7 @@ public final class LibrarianMenu {
 		if (copies.isPresent()) {
 			try {
 				service.setBranchCopies(branch, book, copies.getAsInt());
+				service.commit();
 			} catch (final TransactionException except) {
 				mh.println(
 						"An error occurred while writing your changes to the database.");
