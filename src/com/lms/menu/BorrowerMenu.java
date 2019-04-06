@@ -1,14 +1,11 @@
 package com.lms.menu;
 
-import java.sql.SQLException;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.lms.customExceptions.TransactionException;
 import com.lms.model.Author;
@@ -32,10 +29,6 @@ public final class BorrowerMenu {
 	 * The helper we use for interacting with the user.
 	 */
 	private final MenuHelper mh;
-	/**
-	 * Logger for logging unexpected errors.
-	 */
-	private static final Logger LOGGER = Logger.getLogger(BorrowerMenu.class.getName());
 	/**
 	 * The clock to get "the current time" from.
 	 */

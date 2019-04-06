@@ -1,9 +1,6 @@
 package com.lms.menu;
 
-import java.sql.SQLException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.lms.customExceptions.TransactionException;
 import com.lms.model.Borrower;
@@ -25,11 +22,6 @@ public final class ExecutiveMenu {
 	 * The helper we use for interacting with the user.
 	 */
 	private final MenuHelper mh;
-	/**
-	 * A logger to record unexpected errors.
-	 */
-	private static final Logger LOGGER = Logger.getLogger(ExecutiveMenu.class.getName());
-
 	/**
 	 * To initialize the menu, the caller must provide the service class and the
 	 * menu I/O helper.
