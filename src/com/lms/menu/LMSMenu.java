@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.sql.SQLException;
 import java.time.Clock;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,6 +89,8 @@ public final class LMSMenu {
 					"I/O error reading DB configuration properties file", except);
 			mh.println(
 					"An unrecoverable error occurred while reading database configuration parameters.");
+		} catch (final NoSuchElementException except) {
+			LOGGER.log(Level.FINE, "NoSuchElementException, probably EOF", except);
 		}
 	}
 	/**
