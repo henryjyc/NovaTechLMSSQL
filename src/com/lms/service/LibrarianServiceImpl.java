@@ -1,5 +1,7 @@
 package com.lms.service;
 
+import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +12,12 @@ import com.lms.customExceptions.TransactionException;
 import com.lms.customExceptions.UnknownSQLException;
 import com.lms.customExceptions.UpdateException;
 import com.lms.dao.BookDao;
+import com.lms.dao.BookDaoImpl;
 import com.lms.dao.CopiesDao;
+import com.lms.dao.CopiesDaoImpl;
+import com.lms.dao.DBConnectionFactory;
 import com.lms.dao.LibraryBranchDao;
+import com.lms.dao.LibraryBranchDaoImpl;
 import com.lms.model.Book;
 import com.lms.model.Branch;
 import com.lms.util.ThrowingRunnable;
@@ -70,6 +76,25 @@ public final class LibrarianServiceImpl implements LibrarianService {
 		rollbackHandle = rollback;
 	}
 
+	/**
+	 * To construct this service class using this constructor, the caller must
+	 * merely supply a connection to the database.
+	 * @param db the connection to the database
+	 * @throws SQLException on error setting up DAOs.
+	 */
+	public LibrarianServiceImpl(final Connection db) throws SQLException {
+		this(new LibraryBranchDaoImpl(db), new BookDaoImpl(db),
+				new CopiesDaoImpl(db), db::commit, db::rollback);
+	}
+	/**
+	 * Constructor that uses the default DB connection factory to supply the
+	 * database connection and uses the default DAO implementations.
+	 * @throws IOException on I/O error reading DB configuration
+	 * @throws SQLException on error setting up the database or DAOs
+	 */
+	public LibrarianServiceImpl() throws IOException, SQLException {
+		this(DBConnectionFactory.getDatabaseConnection());
+	}
 	@Override
 	public List<Branch> getAllBranches() throws TransactionException {
 		try {

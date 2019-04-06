@@ -1,5 +1,7 @@
 package com.lms.service;
 
+import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -16,9 +18,14 @@ import com.lms.customExceptions.InsertException;
 import com.lms.customExceptions.TransactionException;
 import com.lms.customExceptions.UnknownSQLException;
 import com.lms.dao.BookLoansDao;
+import com.lms.dao.BookLoansDaoImpl;
 import com.lms.dao.BorrowerDao;
+import com.lms.dao.BorrowerDaoImpl;
 import com.lms.dao.CopiesDao;
+import com.lms.dao.CopiesDaoImpl;
+import com.lms.dao.DBConnectionFactory;
 import com.lms.dao.LibraryBranchDao;
+import com.lms.dao.LibraryBranchDaoImpl;
 import com.lms.model.Book;
 import com.lms.model.Borrower;
 import com.lms.model.Branch;
@@ -89,6 +96,26 @@ public final class BorrowerServiceImpl implements BorrowerService {
 		this.clock = clock;
 		commitHandle = commit;
 		rollbackHandle = rollback;
+	}
+	/**
+	 * To construct this service class using this constructor, the caller must
+	 * merely supply a connection to the database.
+	 * @param db the connection to the database
+	 * @throws SQLException on error setting up DAOs.
+	 */
+	public BorrowerServiceImpl(final Connection db) throws SQLException {
+		this(new LibraryBranchDaoImpl(db), new BookLoansDaoImpl(db),
+				new CopiesDaoImpl(db), new BorrowerDaoImpl(db),
+				Clock.systemDefaultZone(), db::commit, db::rollback);
+	}
+	/**
+	 * Constructor that uses the default DB connection factory to supply the
+	 * database connection and uses the default DAO implementations.
+	 * @throws IOException on I/O error reading DB configuration
+	 * @throws SQLException on error setting up the database or DAOs
+	 */
+	public BorrowerServiceImpl() throws IOException, SQLException {
+		this(DBConnectionFactory.getDatabaseConnection());
 	}
 
 	@Override

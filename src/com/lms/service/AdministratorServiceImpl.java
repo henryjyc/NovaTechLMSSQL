@@ -1,5 +1,7 @@
 package com.lms.service;
 
+import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -13,11 +15,18 @@ import com.lms.customExceptions.TransactionException;
 import com.lms.customExceptions.UnknownSQLException;
 import com.lms.customExceptions.UpdateException;
 import com.lms.dao.AuthorDao;
+import com.lms.dao.AuthorDaoImpl;
 import com.lms.dao.BookDao;
+import com.lms.dao.BookDaoImpl;
 import com.lms.dao.BookLoansDao;
+import com.lms.dao.BookLoansDaoImpl;
 import com.lms.dao.BorrowerDao;
+import com.lms.dao.BorrowerDaoImpl;
+import com.lms.dao.DBConnectionFactory;
 import com.lms.dao.LibraryBranchDao;
+import com.lms.dao.LibraryBranchDaoImpl;
 import com.lms.dao.PublisherDao;
+import com.lms.dao.PublisherDaoImpl;
 import com.lms.model.Author;
 import com.lms.model.Book;
 import com.lms.model.Borrower;
@@ -73,8 +82,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 	private final ThrowingRunnable rollbackHandle;
 
 	/**
-	 * To construct this service class, the caller must supply instances of each DAO
-	 * it uses and method references to commit and roll back transactions.
+	 * To construct this service class using this constructor, the caller must
+	 * supply instances of each DAO it uses and method references to commit and roll
+	 * back transactions.
 	 *
 	 * @param branchDao    the branch DAO
 	 * @param bookDao      the book DAO
@@ -99,6 +109,29 @@ public final class AdministratorServiceImpl implements AdministratorService {
 		this.borrowerDao = borrowerDao;
 		commitHandle = commit;
 		rollbackHandle = rollback;
+	}
+
+	/**
+	 * To construct this service class using this constructor, the caller must
+	 * merely supply a connection to the database.
+	 * @param db the connection to the database
+	 * @throws SQLException on error setting up DAOs.
+	 */
+	public AdministratorServiceImpl(final Connection db) throws SQLException {
+		this(new LibraryBranchDaoImpl(db), new BookDaoImpl(db),
+				new AuthorDaoImpl(db), new PublisherDaoImpl(db),
+				new BookLoansDaoImpl(db), new BorrowerDaoImpl(db), db::commit,
+				db::rollback);
+	}
+
+	/**
+	 * Constructor that uses the default DB connection factory to supply the
+	 * database connection and uses the default DAO implementations.
+	 * @throws IOException on I/O error reading DB configuration
+	 * @throws SQLException on error setting up the database or DAOs
+	 */
+	public AdministratorServiceImpl() throws SQLException, IOException {
+		this(DBConnectionFactory.getDatabaseConnection());
 	}
 
 	@Override

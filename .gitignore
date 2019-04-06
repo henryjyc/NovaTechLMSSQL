@@ -24,3 +24,4 @@ hs_err_pid*
 /bin/
 # .config file will contain your root and password
 .config
+src/db.properties
