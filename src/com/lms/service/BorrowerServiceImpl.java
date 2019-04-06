@@ -186,7 +186,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			throw new UnknownSQLException("Getting loan details failed", except);
 		}
 		if (loan.isPresent()) {
-			if (loan.get().getDueDate().isAfter(LocalDate.now(clock))) {
+			if (LocalDate.now(clock).isAfter(loan.get().getDueDate())) {
 				return false;
 			} else {
 				try {
