@@ -17,7 +17,10 @@ import org.junit.jupiter.api.Test;
 
 import com.lms.model.Book;
 import com.lms.model.Branch;
-
+/**
+ * Test of the copies DAO.
+ * @author Jonathan Lovelace
+ */
 class CopiesDaoTest {
 	/**
 	 * The DAO being tested.
@@ -50,6 +53,10 @@ class CopiesDaoTest {
 		db.close();
 	}
 
+	/**
+	 * Test single-row retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	final void testGetCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -69,6 +76,10 @@ class CopiesDaoTest {
 				"Copy counts are not shared between branches");
 	}
 
+	/**
+	 * Test single-row insertion/update.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	final void testSetCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -104,6 +115,10 @@ class CopiesDaoTest {
 		}
 	}
 
+	/**
+	 * Test getting all copies for a given branch.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	final void testGetAllBranchCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -126,6 +141,10 @@ class CopiesDaoTest {
 				"Expected book copies returned");
 	}
 
+	/**
+	 * Test getting all copies of a given book.
+	 * @throws SQLException if something goes wrong.
+	 */
 	@Test
 	final void testGetAllBookCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -148,6 +167,10 @@ class CopiesDaoTest {
 				"Expected branch copies returned");
 	}
 
+	/**
+	 * Test full-table retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	final void testGetAllCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);

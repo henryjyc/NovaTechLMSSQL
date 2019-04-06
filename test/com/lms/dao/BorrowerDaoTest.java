@@ -21,6 +21,11 @@ import com.lms.model.Book;
 import com.lms.model.Borrower;
 import com.lms.model.Branch;
 
+/**
+ * Test of the borrower DAO.
+ * @author Jonathan Lovelace
+ *
+ */
 class BorrowerDaoTest {
 	/**
 	 * The DAO being tested.
@@ -53,6 +58,10 @@ class BorrowerDaoTest {
 		db.close();
 	}
 
+	/**
+	 * Test creation.
+	 * @throws SQLException if something goes wrong.
+	 */
 	@Test
 	public final void testCreate() throws SQLException {
 		final Borrower expected = new Borrower(1, "borrower name",
@@ -71,6 +80,10 @@ class BorrowerDaoTest {
 		}
 	}
 
+	/**
+	 * Test update.
+	 * @throws SQLException if something goes wrong.
+	 */
 	@Test
 	public final void testUpdate() throws SQLException {
 		final Borrower before = new Borrower(1, "before name", "before address",
@@ -95,6 +108,10 @@ class BorrowerDaoTest {
 		assertEquals(after, testee.get(1), "third update propagated to database");
 	}
 
+	/**
+	 * Test delete.
+	 * @throws SQLException if something goes wrong.
+	 */
 	@Test
 	public final void testDelete() throws SQLException {
 		try (PreparedStatement statement = db.prepareStatement(
@@ -115,6 +132,10 @@ class BorrowerDaoTest {
 				"Remaining values are as expected after deletion");
 	}
 
+	/**
+	 * Test retrieval of a single row.
+	 * @throws SQLException if something goes wrong.
+	 */
 	@Test
 	public final void testGet() throws SQLException {
 		try (PreparedStatement statement = db.prepareStatement(
@@ -141,6 +162,10 @@ class BorrowerDaoTest {
 		assertNull(testee.get(5), "get() returns null if no such row");
 	}
 
+	/**
+	 * Test full-table retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testGetAll() throws SQLException {
 		try (PreparedStatement statement = db.prepareStatement(
@@ -189,5 +214,4 @@ class BorrowerDaoTest {
 		assertEquals(1, loansDao.getAll().size(),
 				"Loan of book to deleted borrower was also removed");
 	}
-
 }

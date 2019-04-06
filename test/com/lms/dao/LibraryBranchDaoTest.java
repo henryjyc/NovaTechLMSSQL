@@ -21,7 +21,11 @@ import org.junit.jupiter.api.Test;
 import com.lms.model.Book;
 import com.lms.model.Borrower;
 import com.lms.model.Branch;
-
+/**
+ * Test of library-branch DAO.
+ * @author Jonathan Lovelace
+ *
+ */
 class LibraryBranchDaoTest {
 	/**
 	 * The DAO being tested.

@@ -219,5 +219,4 @@ public final class AuthorDAOTest {
 		}
 		assertThrows(SQLException.class, () -> testee.create(null));
 	}
-
 }

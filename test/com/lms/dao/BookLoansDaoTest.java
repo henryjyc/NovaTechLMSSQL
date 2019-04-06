@@ -1,6 +1,9 @@
 package com.lms.dao;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,6 +23,12 @@ import com.lms.model.Borrower;
 import com.lms.model.Branch;
 import com.lms.model.Loan;
 
+/**
+ * Test of the loans DAO.
+ *
+ * @author Jonathan Lovelace
+ *
+ */
 class BookLoansDaoTest {
 	/**
 	 * The DAO being tested.
@@ -52,6 +61,10 @@ class BookLoansDaoTest {
 		db.close();
 	}
 
+	/**
+	 * Test of loan creation.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testCreate() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -70,6 +83,10 @@ class BookLoansDaoTest {
 				"Can't create duplicate loan");
 	}
 
+	/**
+	 * Test of loan update.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testUpdate() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -90,6 +107,10 @@ class BookLoansDaoTest {
 				"Loan has changed after update");
 	}
 
+	/**
+	 * Test of deletion.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testDelete() throws SQLException {
 		assertEquals(0, testee.getAll().size(), "Empty table before adding");
@@ -107,6 +128,10 @@ class BookLoansDaoTest {
 		assertEquals(0, testee.getAll().size(), "Empty table after removing loan");
 	}
 
+	/**
+	 * Test of individual-row retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testGet() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -125,6 +150,10 @@ class BookLoansDaoTest {
 				"Result of retrieval is as expected");
 	}
 
+	/**
+	 * Test of full-table retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testGetAll() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -144,5 +173,4 @@ class BookLoansDaoTest {
 		assertEquals(expected, new HashSet<>(testee.getAll()),
 				"All loans are returned by getAll");
 	}
-
 }
