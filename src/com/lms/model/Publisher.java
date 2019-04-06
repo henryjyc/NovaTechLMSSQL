@@ -34,8 +34,7 @@ public final class Publisher {
 	 * @param name the publisher's name
 	 */
 	public Publisher(final int id, final String name) {
-		this.id = id;
-		this.name = name;
+		this(id, name, "", "");
 	}
 
 	/**
