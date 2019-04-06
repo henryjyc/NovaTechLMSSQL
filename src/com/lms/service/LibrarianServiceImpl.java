@@ -14,6 +14,7 @@ import com.lms.dao.CopiesDao;
 import com.lms.dao.LibraryBranchDao;
 import com.lms.model.Book;
 import com.lms.model.Branch;
+import com.lms.util.ThrowingRunnable;
 
 /**
  * The "service" class to help UIs for librarians.
@@ -37,20 +38,36 @@ public final class LibrarianServiceImpl implements LibrarianService {
 	 * Logger for handling errors in the DAO layer.
 	 */
 	private static final Logger LOGGER = Logger.getLogger(LibrarianService.class.getName());
+	/**
+	 * Method to use to commit a transaction, if the DAO backend supports transactions.
+	 */
+	private final ThrowingRunnable commitHandle;
+	/**
+	 * Method to use to roll back a transaction, if the DAO backend supports transactions.
+	 */
+	private final ThrowingRunnable rollbackHandle;
 
 	/**
 	 * To construct an instance of this service class, the caller must supply
-	 * instances of each DAO it uses.
+	 * instances of each DAO it uses and method references to commit and roll back
+	 * transactions.
 	 *
 	 * @param branchDao the library-branch DAO
 	 * @param bookDao   the book DAO
 	 * @param copiesDao the book-copies DAO
+	 * @param commit       the method handle to commit a transaction, if the backend
+	 *                     supports that
+	 * @param rollback     the method handle to roll back a transaction, if the
+	 *                     backend supports that
 	 */
 	public LibrarianServiceImpl(final LibraryBranchDao branchDao, final BookDao bookDao,
-			final CopiesDao copiesDao) {
+			final CopiesDao copiesDao, final ThrowingRunnable commit,
+			final ThrowingRunnable rollback) {
 		this.branchDao = branchDao;
 		this.bookDao = bookDao;
 		this.copiesDao = copiesDao;
+		commitHandle = commit;
+		rollbackHandle = rollback;
 	}
 
 	@Override
@@ -106,6 +123,15 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting copy records", except);
 			// TODO: abort current transaction
 			throw new UnknownSQLException("Getting copy records failed", except);
+		}
+	}
+	@Override
+	public void commit() throws TransactionException {
+		try {
+			commitHandle.run();
+		} catch (final Exception except) {
+			LOGGER.log(Level.SEVERE, "Error of some kind while committing transaction", except);
+			throw new UnknownSQLException("Committing the transaction failed", except);
 		}
 	}
 }

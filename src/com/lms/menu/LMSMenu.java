@@ -81,14 +81,16 @@ public final class LMSMenu {
 						new BorrowerServiceImpl(new LibraryBranchDaoImpl(connection),
 									new BookLoansDaoImpl(connection),
 									new CopiesDaoImpl(connection),
-									new BorrowerDaoImpl(connection), clock),
+									new BorrowerDaoImpl(connection), clock,
+									connection::commit, connection::rollback),
 							mh, clock).menu();
 					continue;
 				case "2":
 					new LibrarianMenu(
 							new LibrarianServiceImpl(new LibraryBranchDaoImpl(connection),
 									new BookDaoImpl(connection),
-									new CopiesDaoImpl(connection)),
+									new CopiesDaoImpl(connection),
+									connection::commit, connection::rollback),
 							mh).menu();
 					continue;
 				case "3":
@@ -97,7 +99,8 @@ public final class LMSMenu {
 							new BookDaoImpl(connection), new AuthorDaoImpl(connection),
 							new PublisherDaoImpl(connection),
 							new BookLoansDaoImpl(connection),
-							new BorrowerDaoImpl(connection)), mh).menu();
+							new BorrowerDaoImpl(connection), connection::commit,
+							connection::rollback), mh).menu();
 					continue;
 				default:
 					mh.println("Please select role, or type 0 to quit");

@@ -24,6 +24,7 @@ import com.lms.model.Borrower;
 import com.lms.model.Branch;
 import com.lms.model.Loan;
 import com.lms.model.Publisher;
+import com.lms.util.ThrowingRunnable;
 
 /**
  * An implementation of the service class for administrative UIs.
@@ -62,27 +63,42 @@ public final class AdministratorServiceImpl implements AdministratorService {
 	 * Logger for handling errors in the DAO layer.
 	 */
 	private static final Logger LOGGER = Logger.getLogger(AdministratorService.class.getName());
+	/**
+	 * Method to use to commit a transaction, if the DAO backend supports transactions.
+	 */
+	private final ThrowingRunnable commitHandle;
+	/**
+	 * Method to use to roll back a transaction, if the DAO backend supports transactions.
+	 */
+	private final ThrowingRunnable rollbackHandle;
 
 	/**
 	 * To construct this service class, the caller must supply instances of each DAO
-	 * it uses.
+	 * it uses and method references to commit and roll back transactions.
 	 *
 	 * @param branchDao    the branch DAO
 	 * @param bookDao      the book DAO
 	 * @param authorDao    the author DAO
 	 * @param publisherDao the publisher DAO
 	 * @param loansDao     the loans DAO
+	 * @param commit       the method handle to commit a transaction, if the backend
+	 *                     supports that
+	 * @param rollback     the method handle to roll back a transaction, if the
+	 *                     backend supports that
 	 */
 	public AdministratorServiceImpl(final LibraryBranchDao branchDao,
 			final BookDao bookDao, final AuthorDao authorDao,
 			final PublisherDao publisherDao, final BookLoansDao loansDao,
-			final BorrowerDao borrowerDao) {
+			final BorrowerDao borrowerDao, final ThrowingRunnable commit,
+			final ThrowingRunnable rollback) {
 		this.branchDao = branchDao;
 		this.bookDao = bookDao;
 		this.authorDao = authorDao;
 		this.publisherDao = publisherDao;
 		this.loansDao = loansDao;
 		this.borrowerDao = borrowerDao;
+		commitHandle = commit;
+		rollbackHandle = rollback;
 	}
 
 	@Override
@@ -355,6 +371,16 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loans", except);
 			// TODO: abort current transaction
 			throw new UnknownSQLException("Getting loan records failed", except);
+		}
+	}
+
+	@Override
+	public void commit() throws TransactionException {
+		try {
+			commitHandle.run();
+		} catch (final Exception except) {
+			LOGGER.log(Level.SEVERE, "Error of some kind while committing transaction", except);
+			throw new UnknownSQLException("Committing the transaction failed", except);
 		}
 	}
 }

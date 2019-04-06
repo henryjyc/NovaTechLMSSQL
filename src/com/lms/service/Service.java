@@ -19,4 +19,8 @@ public interface Service {
 	 * @return all the borrowers in the database.
 	 */
 	List<Branch> getAllBranches() throws TransactionException;
+	/**
+	 * Commit all outstanding operations to the database, if the backend supports transactions.
+	 */
+	void commit() throws TransactionException;
 }

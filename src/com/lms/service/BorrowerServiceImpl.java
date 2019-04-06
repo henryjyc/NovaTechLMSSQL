@@ -23,6 +23,7 @@ import com.lms.model.Book;
 import com.lms.model.Borrower;
 import com.lms.model.Branch;
 import com.lms.model.Loan;
+import com.lms.util.ThrowingRunnable;
 
 /**
  * The "service" class to help UIs for borrowers.
@@ -54,24 +55,40 @@ public final class BorrowerServiceImpl implements BorrowerService {
 	 * Logger for handling errors in the DAO layer.
 	 */
 	private static final Logger LOGGER = Logger.getLogger(BorrowerService.class.getName());
+	/**
+	 * Method to use to commit a transaction, if the DAO backend supports transactions.
+	 */
+	private final ThrowingRunnable commitHandle;
+	/**
+	 * Method to use to roll back a transaction, if the DAO backend supports transactions.
+	 */
+	private final ThrowingRunnable rollbackHandle;
 
 	/**
 	 * To construct this service class, the caller must supply instances of each DAO
-	 * it uses and a clock to get "the current date".
+	 * it uses, a clock to get "the current date," and method references to commit
+	 * and roll back transactions.
 	 *
 	 * @param branchDao   the library-branch DAO.
 	 * @param loanDao     the loan DAO
 	 * @param copiesDao   the copies DAO
 	 * @param borrowerDao the borrower DAO
+	 * @param commit       the method handle to commit a transaction, if the backend
+	 *                     supports that
+	 * @param rollback     the method handle to roll back a transaction, if the
+	 *                     backend supports that
 	 */
 	public BorrowerServiceImpl(final LibraryBranchDao branchDao,
 			final BookLoansDao loanDao, final CopiesDao copiesDao,
-			final BorrowerDao borrowerDao, final Clock clock) {
+			final BorrowerDao borrowerDao, final Clock clock, final ThrowingRunnable commit,
+			final ThrowingRunnable rollback) {
 		this.branchDao = branchDao;
 		this.loanDao = loanDao;
 		this.copiesDao = copiesDao;
 		this.borrowerDao = borrowerDao;
 		this.clock = clock;
+		commitHandle = commit;
+		rollbackHandle = rollback;
 	}
 
 	@Override
@@ -168,6 +185,15 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting borrower details", except);
 			// TODO: abort current transaction
 			throw new UnknownSQLException("Getting borrower record failed", except);
+		}
+	}
+	@Override
+	public void commit() throws TransactionException {
+		try {
+			commitHandle.run();
+		} catch (final Exception except) {
+			LOGGER.log(Level.SEVERE, "Error of some kind while committing transaction", except);
+			throw new UnknownSQLException("Committing the transaction failed", except);
 		}
 	}
 }
