@@ -28,7 +28,9 @@ public interface BorrowerService extends Service {
 	 * @param branch   the branch from which the book is being borrowed
 	 * @param dateOut  the date the book is being checked out
 	 * @param dueDate  the date the book is due
-	 * @return the object representing the loan
+	 * @return the object representing the loan, or null if either the the borrower
+	 *         already has that book out from that branch or that branch has no
+	 *         available copies of that book.
 	 */
 	Loan borrowBook(Borrower borrower, Book book, Branch branch,
 			LocalDateTime dateOut, LocalDate dueDate) throws TransactionException;
