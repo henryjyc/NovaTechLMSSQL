@@ -79,13 +79,12 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 			if (dateOut == null) {
 				createStatement.setNull(4, Types.DATE);
 			} else {
-				createStatement.setDate(4,
-						java.sql.Date.valueOf(dateOut.toLocalDate()));
+				createStatement.setDate(4, Date.valueOf(dateOut.toLocalDate()));
 			}
 			if (dueDate == null) {
 				createStatement.setNull(5, Types.DATE);
 			} else {
-				createStatement.setDate(5, java.sql.Date.valueOf(dueDate));
+				createStatement.setDate(5, Date.valueOf(dueDate));
 			}
 			createStatement.executeUpdate();
 		}
@@ -99,14 +98,13 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 			if (dateOut == null) {
 				updateStatement.setNull(1, Types.DATE);
 			} else {
-				updateStatement.setDate(1,
-						java.sql.Date.valueOf(dateOut.toLocalDate()));
+				updateStatement.setDate(1, Date.valueOf(dateOut.toLocalDate()));
 			}
 			final LocalDate dueDate = loan.getDueDate();
 			if (dueDate == null) {
 				updateStatement.setNull(2, Types.DATE);
 			} else {
-				updateStatement.setDate(2, java.sql.Date.valueOf(dueDate));
+				updateStatement.setDate(2, Date.valueOf(dueDate));
 			}
 			updateStatement.setInt(3, loan.getBook().getId());
 			updateStatement.setInt(4, loan.getBranch().getId());
