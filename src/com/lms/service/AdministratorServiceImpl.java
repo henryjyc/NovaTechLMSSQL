@@ -164,9 +164,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new InsertException("Creating a book failed"); // TODO: Add constructor taking cause to all custom exceptions
+			throw new InsertException("Creating a book failed", except);
 		}
 	}
 
@@ -179,9 +179,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new UpdateException("Updating book record failed");
+			throw new UpdateException("Updating book record failed", except);
 		}
 	}
 
@@ -194,9 +194,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new DeleteException("Removing book record failed");
+			throw new DeleteException("Removing book record failed", except);
 		}
 	}
 
@@ -224,9 +224,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new InsertException("Creating an author failed");
+			throw new InsertException("Creating an author failed", except);
 		}
 
 	}
@@ -240,9 +240,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new UpdateException("Updating author record failed");
+			throw new UpdateException("Updating author record failed", except);
 		}
 	}
 
@@ -255,9 +255,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new DeleteException("Removing author record failed");
+			throw new DeleteException("Removing author record failed", except);
 		}
 	}
 
@@ -291,9 +291,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new InsertException("Creating a publisher failed");
+			throw new InsertException("Creating a publisher failed", except);
 		}
 	}
 
@@ -306,9 +306,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new UpdateException("Updating publisher record failed");
+			throw new UpdateException("Updating publisher record failed", except);
 		}
 	}
 
@@ -321,9 +321,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new DeleteException("Removing publisher record failed");
+			throw new DeleteException("Removing publisher record failed", except);
 		}
 	}
 
@@ -351,9 +351,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new InsertException("Creating a branch failed");
+			throw new InsertException("Creating a branch failed", except);
 		}
 	}
 
@@ -366,9 +366,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new DeleteException("Removing branch record failed");
+			throw new DeleteException("Removing branch record failed", except);
 		}
 	}
 
@@ -381,9 +381,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new UpdateException("Updating branch record failed");
+			throw new UpdateException("Updating branch record failed", except);
 		}
 	}
 
@@ -397,9 +397,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);// TODO: add as suppressed exception to next-thrown
 			}
-			throw new InsertException("Creating a borrower failed");
+			throw new InsertException("Creating a borrower failed", except);
 		}
 	}
 
@@ -412,9 +412,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new UpdateException("Updating borrower record failed");
+			throw new UpdateException("Updating borrower record failed", except);
 		}
 	}
 
@@ -427,9 +427,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new DeleteException("Removing borrower record failed");
+			throw new DeleteException("Removing borrower record failed", except);
 		}
 	}
 
@@ -472,9 +472,9 @@ public final class AdministratorServiceImpl implements AdministratorService {
 				try {
 					rollbackHandle.run();
 				} catch (final SQLException inner) {
-					LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+					LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 				}
-				throw new UpdateException("Updating loan record failed");
+				throw new UpdateException("Updating loan record failed", except);
 			}
 			return true;
 		} else {

@@ -153,9 +153,9 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new InsertException("Creating a loan failed");
+			throw new InsertException("Creating a loan failed", except);
 		}
 	}
 
@@ -201,9 +201,9 @@ public final class BorrowerServiceImpl implements BorrowerService {
 					try {
 						rollbackHandle.run();
 					} catch (final SQLException inner) {
-						LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+						LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 					}
-					throw new DeleteException("Removing loan record failed");
+					throw new DeleteException("Removing loan record failed", except);
 				}
 				return true;
 			}

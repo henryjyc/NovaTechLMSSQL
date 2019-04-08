@@ -123,9 +123,9 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner); // TODO: add as suppressed exception to next-thrown
 			}
-			throw new UpdateException("Updating book record failed");
+			throw new UpdateException("Updating book record failed", except);
 		}
 	}
 
