@@ -47,11 +47,11 @@ public final class LibrarianServiceImpl implements LibrarianService {
 	/**
 	 * Method to use to commit a transaction, if the DAO backend supports transactions.
 	 */
-	private final ThrowingRunnable commitHandle;
+	private final ThrowingRunnable<SQLException> commitHandle;
 	/**
 	 * Method to use to roll back a transaction, if the DAO backend supports transactions.
 	 */
-	private final ThrowingRunnable rollbackHandle;
+	private final ThrowingRunnable<SQLException> rollbackHandle;
 
 	/**
 	 * To construct an instance of this service class, the caller must supply
@@ -67,8 +67,8 @@ public final class LibrarianServiceImpl implements LibrarianService {
 	 *                     backend supports that
 	 */
 	public LibrarianServiceImpl(final LibraryBranchDao branchDao, final BookDao bookDao,
-			final CopiesDao copiesDao, final ThrowingRunnable commit,
-			final ThrowingRunnable rollback) {
+			final CopiesDao copiesDao, final ThrowingRunnable<SQLException> commit,
+			final ThrowingRunnable<SQLException> rollback) {
 		this.branchDao = branchDao;
 		this.bookDao = bookDao;
 		this.copiesDao = copiesDao;
@@ -103,7 +103,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			LOGGER.log(Level.SEVERE,  "SQL error while getting all branches", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Getting all branches failed", except);
@@ -118,7 +118,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			LOGGER.log(Level.SEVERE, "SQL error while updating a book", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UpdateException("Updating book record failed");
@@ -134,7 +134,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			LOGGER.log(Level.SEVERE, "SQL error while setting copy records", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Setting copy records failed", except);
@@ -149,7 +149,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting books", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Getting book records failed", except);
@@ -164,7 +164,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting copy records", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Getting copy records failed", except);
@@ -174,7 +174,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 	public void commit() throws TransactionException {
 		try {
 			commitHandle.run();
-		} catch (final Exception except) {
+		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "Error of some kind while committing transaction", except);
 			throw new UnknownSQLException("Committing the transaction failed", except);
 		}

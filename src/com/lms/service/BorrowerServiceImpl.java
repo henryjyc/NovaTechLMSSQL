@@ -65,11 +65,11 @@ public final class BorrowerServiceImpl implements BorrowerService {
 	/**
 	 * Method to use to commit a transaction, if the DAO backend supports transactions.
 	 */
-	private final ThrowingRunnable commitHandle;
+	private final ThrowingRunnable<SQLException> commitHandle;
 	/**
 	 * Method to use to roll back a transaction, if the DAO backend supports transactions.
 	 */
-	private final ThrowingRunnable rollbackHandle;
+	private final ThrowingRunnable<SQLException> rollbackHandle;
 
 	/**
 	 * To construct this service class, the caller must supply instances of each DAO
@@ -87,8 +87,9 @@ public final class BorrowerServiceImpl implements BorrowerService {
 	 */
 	public BorrowerServiceImpl(final LibraryBranchDao branchDao,
 			final BookLoansDao loanDao, final CopiesDao copiesDao,
-			final BorrowerDao borrowerDao, final Clock clock, final ThrowingRunnable commit,
-			final ThrowingRunnable rollback) {
+			final BorrowerDao borrowerDao, final Clock clock,
+			final ThrowingRunnable<SQLException> commit,
+			final ThrowingRunnable<SQLException> rollback) {
 		this.branchDao = branchDao;
 		this.loanDao = loanDao;
 		this.copiesDao = copiesDao;
@@ -126,7 +127,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			LOGGER.log(Level.SEVERE,  "SQL error while getting all branches", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Getting all branches failed", except);
@@ -147,7 +148,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			LOGGER.log(Level.SEVERE, "SQL error while creating a loan record", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new InsertException("Creating a loan failed");
@@ -163,7 +164,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting branch copies", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Getting branch copy records failed", except);
@@ -180,7 +181,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loan details", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Getting loan details failed", except);
@@ -195,7 +196,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 					LOGGER.log(Level.SEVERE, "SQL error while removing a loan record", except);
 					try {
 						rollbackHandle.run();
-					} catch (final Exception inner) {
+					} catch (final SQLException inner) {
 						LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 					}
 					throw new DeleteException("Removing loan record failed");
@@ -225,7 +226,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loan records", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Getting loan records failed", except);
@@ -240,7 +241,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			LOGGER.log(Level.SEVERE, "SQL error while getting borrower details", except);
 			try {
 				rollbackHandle.run();
-			} catch (final Exception inner) {
+			} catch (final SQLException inner) {
 				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
 			}
 			throw new UnknownSQLException("Getting borrower record failed", except);
@@ -250,7 +251,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 	public void commit() throws TransactionException {
 		try {
 			commitHandle.run();
-		} catch (final Exception except) {
+		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "Error of some kind while committing transaction", except);
 			throw new UnknownSQLException("Committing the transaction failed", except);
 		}
