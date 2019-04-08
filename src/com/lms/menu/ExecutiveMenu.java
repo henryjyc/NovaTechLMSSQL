@@ -2,7 +2,7 @@ package com.lms.menu;
 
 import java.util.Optional;
 
-import com.lms.customExceptions.TransactionException;
+import com.lms.exceptions.TransactionException;
 import com.lms.model.Borrower;
 import com.lms.model.Branch;
 import com.lms.service.AdministratorService;

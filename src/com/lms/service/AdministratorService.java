@@ -3,7 +3,7 @@ package com.lms.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.lms.customExceptions.TransactionException;
+import com.lms.exceptions.TransactionException;
 import com.lms.model.Author;
 import com.lms.model.Book;
 import com.lms.model.Borrower;

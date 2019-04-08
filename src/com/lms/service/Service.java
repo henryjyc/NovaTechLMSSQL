@@ -2,7 +2,7 @@ package com.lms.service;
 
 import java.util.List;
 
-import com.lms.customExceptions.TransactionException;
+import com.lms.exceptions.TransactionException;
 import com.lms.model.Branch;
 
 /**

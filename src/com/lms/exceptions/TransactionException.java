@@ -1,4 +1,4 @@
-package com.lms.customExceptions;
+package com.lms.exceptions;
 
 /**
  * An exception class to report the failure of an operation, of a type defined
