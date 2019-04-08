@@ -70,9 +70,9 @@ class BookLoansDaoTest {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final BorrowerDao borrowerDao = new BorrowerDaoImpl(db);
-		final Book book = bookDao.create("book title", null, null);
-		final Branch branch = branchDao.create("branch name", "");
-		final Borrower borrower = borrowerDao.create("patron name", "", "");
+		final Book book = bookDao.create("borrowed book title", null, null);
+		final Branch branch = branchDao.create("library name", "");
+		final Borrower borrower = borrowerDao.create("borrower name", "", "");
 		final LocalDateTime timeOut = LocalDateTime.now();
 		final LocalDate due = LocalDate.now();
 		final Loan expected = new Loan(book, borrower, branch, timeOut, due);
@@ -92,9 +92,9 @@ class BookLoansDaoTest {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final BorrowerDao borrowerDao = new BorrowerDaoImpl(db);
-		final Book book = bookDao.create("book title", null, null);
-		final Branch branch = branchDao.create("branch name", "");
-		final Borrower borrower = borrowerDao.create("patron name", "", "");
+		final Book book = bookDao.create("borrowed book title", null, null);
+		final Branch branch = branchDao.create("library name", "");
+		final Borrower borrower = borrowerDao.create("borrower name", "", "");
 		final LocalDateTime timeOut = LocalDateTime.now();
 		final LocalDate due = LocalDate.now();
 		final Loan original = new Loan(book, borrower, branch, timeOut, due);

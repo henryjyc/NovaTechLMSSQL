@@ -86,18 +86,20 @@ class BorrowerDaoTest {
 	 */
 	@Test
 	public final void testUpdate() throws SQLException {
+		final String beforePhone = "before phone";
 		final Borrower before = new Borrower(1, "before name", "before address",
-				"before phone");
-		final Borrower middle = new Borrower(1, "middle name", "before address",
-				"before phone");
-		final Borrower later = new Borrower(1, "middle name", "later address",
-				"before phone");
-		final Borrower after = new Borrower(1, "middle name", "later address",
+				beforePhone);
+		final String middleName = "middle name";
+		final Borrower middle = new Borrower(1, middleName, "before address",
+				beforePhone);
+		final Borrower later = new Borrower(1, middleName, "later address",
+				beforePhone);
+		final Borrower after = new Borrower(1, middleName, "later address",
 				"after phone");
 		final Borrower borrower = testee.create("before name", "before address",
-				"before phone");
+				beforePhone);
 		assertEquals(before, testee.get(1), "initial state as expected");
-		borrower.setName("middle name");
+		borrower.setName(middleName);
 		testee.update(borrower);
 		assertEquals(middle, testee.get(1), "update propagated to database");
 		borrower.setAddress("later address");
@@ -140,24 +142,24 @@ class BorrowerDaoTest {
 	public final void testGet() throws SQLException {
 		try (PreparedStatement statement = db.prepareStatement(
 				"INSERT INTO `tbl_borrower` (`name`, `address`, `phone`) VALUES (?, ?, ?)")) {
-			statement.setString(1, "borrower one");
-			statement.setString(2, "address one");
-			statement.setString(3, "phone one");
+			statement.setString(1, "patron one");
+			statement.setString(2, "first address");
+			statement.setString(3, "first phone");
 			statement.executeUpdate();
-			statement.setString(1, "borrower two");
-			statement.setString(2, "address two");
-			statement.setString(3, "phone two");
+			statement.setString(1, "patron two");
+			statement.setString(2, "second address");
+			statement.setString(3, "second phone");
 			statement.executeUpdate();
-			statement.setString(1, "borrower three");
+			statement.setString(1, "patron three");
 			statement.setNull(2, Types.VARCHAR);
 			statement.setNull(3, Types.VARCHAR);
 			statement.executeUpdate();
 		}
-		assertEquals(new Borrower(1, "borrower one", "address one", "phone one"),
+		assertEquals(new Borrower(1, "patron one", "first address", "first phone"),
 				testee.get(1), "get() returns expected borrower");
-		assertEquals(new Borrower(3, "borrower three", "", ""), testee.get(3),
+		assertEquals(new Borrower(3, "patron three", "", ""), testee.get(3),
 				"get() translates nulls to empty strings");
-		assertEquals(new Borrower(2, "borrower two", "address two", "phone two"),
+		assertEquals(new Borrower(2, "patron two", "second address", "second phone"),
 				testee.get(2), "get() returns expected borrower");
 		assertNull(testee.get(5), "get() returns null if no such row");
 	}

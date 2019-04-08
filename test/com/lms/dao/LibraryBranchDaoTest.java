@@ -28,6 +28,18 @@ import com.lms.model.Branch;
  */
 class LibraryBranchDaoTest {
 	/**
+	 * The name of the "branch name" field in the database table.
+	 */
+	private static final String BRANCH_NAME = "branchName";
+	/**
+	 * The name of the "branch address" field in the database table.
+	 */
+	private static final String BRANCH_ADDRESS_FIELD = "branchAddress";
+	/**
+	 * The name of the "branch ID" field in the database table.
+	 */
+	private static final String BRANCH_ID_FIELD = "branchId";
+	/**
 	 * The DAO being tested.
 	 */
 	private LibraryBranchDao testee;
@@ -72,19 +84,19 @@ class LibraryBranchDaoTest {
 			testee.create("first branch", "");
 			try (ResultSet rs = ps.executeQuery()) {
 				rs.next();
-				assertEquals("first branch", rs.getString("branchName"),
+				assertEquals("first branch", rs.getString(BRANCH_NAME),
 						"name was inserted");
-				assertEquals(1, rs.getInt("branchId"), "row has expected ID");
-				assertNull(rs.getString("branchAddress"),
+				assertEquals(1, rs.getInt(BRANCH_ID_FIELD), "row has expected ID");
+				assertNull(rs.getString(BRANCH_ADDRESS_FIELD),
 						"empty string translated to null");
 			}
 			testee.create("second branch", "address");
 			try (ResultSet rs = ps.executeQuery()) {
 				rs.next();
-				assertEquals("second branch", rs.getString("branchName"),
+				assertEquals("second branch", rs.getString(BRANCH_NAME),
 						"different name was inserted");
-				assertEquals(2, rs.getInt("branchId"), "row has expected ID");
-				assertEquals("address", rs.getString("branchAddress"),
+				assertEquals(2, rs.getInt(BRANCH_ID_FIELD), "row has expected ID");
+				assertEquals("address", rs.getString(BRANCH_ADDRESS_FIELD),
 						"address was inserted");
 			}
 		}
@@ -101,28 +113,28 @@ class LibraryBranchDaoTest {
 			final Branch branch = testee.create("branch name", "branch address");
 			try (ResultSet rs = ps.executeQuery()) {
 				rs.next();
-				assertEquals("branch name", rs.getString("branchName"),
+				assertEquals("branch name", rs.getString(BRANCH_NAME),
 						"name was inserted");
-				assertEquals(1, rs.getInt("branchId"), "row has expected ID");
-				assertEquals("branch address", rs.getString("branchAddress"),
+				assertEquals(1, rs.getInt(BRANCH_ID_FIELD), "row has expected ID");
+				assertEquals("branch address", rs.getString(BRANCH_ADDRESS_FIELD),
 						"address was inserted");
 			}
 			branch.setName("changed name");
 			testee.update(branch);
 			try (ResultSet rs = ps.executeQuery()) {
 				rs.next();
-				assertEquals("changed name", rs.getString("branchName"),
+				assertEquals("changed name", rs.getString(BRANCH_NAME),
 						"name was changed");
-				assertEquals(1, rs.getInt("branchId"), "still the same row");
-				assertEquals("branch address", rs.getString("branchAddress"),
+				assertEquals(1, rs.getInt(BRANCH_ID_FIELD), "still the same row");
+				assertEquals("branch address", rs.getString(BRANCH_ADDRESS_FIELD),
 						"address was not changed");
 			}
 			branch.setAddress("changed address");
 			testee.update(branch);
 			try (ResultSet rs = ps.executeQuery()) {
 				rs.next();
-				assertEquals(1, rs.getInt("branchId"), "still the same row");
-				assertEquals("changed address", rs.getString("branchAddress"),
+				assertEquals(1, rs.getInt(BRANCH_ID_FIELD), "still the same row");
+				assertEquals("changed address", rs.getString(BRANCH_ADDRESS_FIELD),
 						"address was changed");
 			}
 		}
@@ -193,21 +205,21 @@ class LibraryBranchDaoTest {
 	public final void testGet() throws SQLException {
 		try (PreparedStatement ps = db.prepareStatement(
 				"INSERT INTO `tbl_library_branch` (`branchName`, `branchAddress`) VALUES (?, ?)")) {
-			ps.setString(1, "name one");
-			ps.setString(2, "address one");
+			ps.setString(1, "first name");
+			ps.setString(2, "first address");
 			ps.executeUpdate();
-			ps.setString(1, "name two");
-			ps.setString(2, "address two");
+			ps.setString(1, "second name");
+			ps.setString(2, "second address");
 			ps.executeUpdate();
-			ps.setString(1, "name three");
+			ps.setString(1, "third name");
 			ps.setNull(2, Types.VARCHAR);
 			ps.executeUpdate();
 		}
-		assertEquals(new Branch(2, "name two", "address two"), testee.get(2),
+		assertEquals(new Branch(2, "second name", "second address"), testee.get(2),
 				"Expected branch returned by get()");
-		assertEquals(new Branch(3, "name three", ""), testee.get(3),
+		assertEquals(new Branch(3, "third name", ""), testee.get(3),
 				"Expected branch returned by get()");
-		assertEquals(new Branch(1, "name one", "address one"), testee.get(1),
+		assertEquals(new Branch(1, "first name", "first address"), testee.get(1),
 				"Expected branch returned by get()");
 		assertNull(testee.get(6), "get() returns null when no such row");
 	}

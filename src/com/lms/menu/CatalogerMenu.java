@@ -16,6 +16,10 @@ import com.lms.service.AdministratorService;
  */
 public final class CatalogerMenu {
 	/**
+	 * The "cancel" message most "choose one of the following" menus use.
+	 */
+	private static final String CANCEL_MESSAGE = "Quit to previous menu";
+	/**
 	 * The service class we use to handle database interfacing for us.
 	 */
 	private final AdministratorService service;
@@ -161,7 +165,7 @@ public final class CatalogerMenu {
 		final Optional<Optional<Author>> chosenAuthor;
 		try {
 			chosenAuthor = mh.chooseFromList(service.getAllAuthors(), "Author to update:",
-					"Author to update:", "Quit to previous menu", "No authors known",
+					"Author to update:", CANCEL_MESSAGE, "No authors known",
 					"No such author", Author::getName);
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while getting all authors from the database.");
@@ -194,7 +198,7 @@ public final class CatalogerMenu {
 		try {
 			chosenPublisher = mh.chooseFromList(service.getAllPublishers(),
 					"Publisher to update:", "Publisher to update:",
-					"Quit to previous menu", "No publishers known", "No such publisher",
+					CANCEL_MESSAGE, "No publishers known", "No such publisher",
 					Publisher::getName);
 		} catch (final TransactionException except) {
 			mh.println(
@@ -236,7 +240,7 @@ public final class CatalogerMenu {
 		final Optional<Optional<Book>> chosenBook;
 		try {
 			chosenBook = mh.chooseFromList(service.getAllBooks(), "Book to update:",
-					"Book to update:", "Quit to previous menu", "No books known",
+					"Book to update:", CANCEL_MESSAGE, "No books known",
 					"No such book",
 					book -> String.format("%s by %s", book.getTitle(),
 							Optional.ofNullable(book.getAuthor()).map(Author::getName)
@@ -282,7 +286,7 @@ public final class CatalogerMenu {
 		final Optional<Optional<Book>> chosenBook;
 		try {
 			chosenBook = mh.chooseFromList(service.getAllBooks(),
-					"Choose book to remove:", "Book to remove:", "Quit to previous menu",
+					"Choose book to remove:", "Book to remove:", CANCEL_MESSAGE,
 					"No books found", "No such book",
 					book -> String.format("%s by %s", book.getTitle(),
 							Optional.ofNullable(book.getAuthor()).map(Author::getName)
@@ -306,7 +310,7 @@ public final class CatalogerMenu {
 		try {
 			chosenAuthor = mh.chooseFromList(service.getAllAuthors(),
 					"Choose author to remove with all his/her books:",
-					"Author to remove:", "Quit to previous menu", "No authors found",
+					"Author to remove:", CANCEL_MESSAGE, "No authors found",
 					"No such author", Author::getName);
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while getting all authors from the database");
@@ -327,7 +331,7 @@ public final class CatalogerMenu {
 		try {
 			chosenPublisher = mh.chooseFromList(service.getAllPublishers(),
 					"Choose author to remove with all their books:",
-					"Publisher to remove:", "Quit to previous menu",
+					"Publisher to remove:", CANCEL_MESSAGE,
 					"No publishers found", "No such publisher", Publisher::getName);
 		} catch (final TransactionException except) {
 			mh.println(

@@ -61,10 +61,10 @@ class CopiesDaoTest {
 	public final void testGetCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
-		final Book firstBook = bookDao.create("first book", null, null);
-		final Book secondBook = bookDao.create("second book", null, null);
-		final Branch firstBranch = branchDao.create("first branch", "first address");
-		final Branch secondBranch = branchDao.create("second branch", "");
+		final Book firstBook = bookDao.create("book one", null, null);
+		final Book secondBook = bookDao.create("book two", null, null);
+		final Branch firstBranch = branchDao.create("branch one", "address one");
+		final Branch secondBranch = branchDao.create("branch two", "");
 		assertEquals(0, testee.getCopies(firstBranch, firstBook),
 				"No copies when table is empty");
 		testee.setCopies(firstBranch, firstBook, 2);
@@ -84,10 +84,10 @@ class CopiesDaoTest {
 	public final void testSetCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
-		final Book firstBook = bookDao.create("first book", null, null);
-		final Book secondBook = bookDao.create("second book", null, null);
-		final Branch firstBranch = branchDao.create("first branch", "first address");
-		final Branch secondBranch = branchDao.create("second branch", "");
+		final Book firstBook = bookDao.create("book one", null, null);
+		final Book secondBook = bookDao.create("book two", null, null);
+		final Branch firstBranch = branchDao.create("branch one", "address one");
+		final Branch secondBranch = branchDao.create("branch two", "");
 		try (PreparedStatement count = db
 				.prepareStatement("SELECT COUNT(*) FROM `tbl_book_copies`");
 				PreparedStatement sum = db.prepareStatement(

@@ -15,6 +15,10 @@ import com.lms.service.AdministratorService;
  */
 public final class ExecutiveMenu {
 	/**
+	 * The "cancel" message most "choose one of the following" menus use.
+	 */
+	private static final String CANCEL_MESSAGE = "Quit to previous menu";
+	/**
 	 * The service class we use to handle database interfacing for us.
 	 */
 	private final AdministratorService service;
@@ -51,7 +55,7 @@ public final class ExecutiveMenu {
 		final Optional<Optional<Branch>> chosenBranch;
 		try {
 			chosenBranch = mh.chooseFromList(service.getAllBranches(),
-					"Choose branch to update:", "Chosen branch:", "Quit to previous menu",
+					"Choose branch to update:", "Chosen branch:", CANCEL_MESSAGE,
 					"There are no library branches", "No such branch", Branch::getName);
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while getting all branches from the database.");
@@ -89,7 +93,7 @@ public final class ExecutiveMenu {
 		try {
 			chosenBranch = mh.chooseFromList(service.getAllBranches(),
 					"Choose branch to remove, with all copies in and loans from it:",
-					"Chosen branch:", "Quit to previous menu",
+					"Chosen branch:", CANCEL_MESSAGE,
 					"There are no library branches", "No such branch", Branch::getName);
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while getting all branches from the database.");
@@ -123,7 +127,7 @@ public final class ExecutiveMenu {
 		try {
 			chosenBorrower = mh.chooseFromList(service.getAllBorrowers(),
 					"Choose borrower to update:", "Chosen borrower:",
-					"Quit to previous menu", "There are no borrowers", "No such borrower",
+					CANCEL_MESSAGE, "There are no borrowers", "No such borrower",
 					Borrower::getName);
 		} catch (final TransactionException except) {
 			mh.println(
@@ -167,7 +171,7 @@ public final class ExecutiveMenu {
 		try {
 			chosenBorrower = mh.chooseFromList(service.getAllBorrowers(),
 					"Choose borrower to remove:", "Chosen borrower:",
-					"Quit to previous menu", "There are no borrowers", "No such borrower",
+					CANCEL_MESSAGE, "There are no borrowers", "No such borrower",
 					Borrower::getName);
 		} catch (final TransactionException except) {
 			mh.println("An error occurred while getting all branches from the database.");
