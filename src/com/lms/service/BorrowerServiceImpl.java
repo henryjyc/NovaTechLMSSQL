@@ -144,7 +144,13 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			final LocalDate dueDate) throws TransactionException {
 		try {
 			if (loanDao.get(book, borrower, branch) == null) {
-				return loanDao.create(book, borrower, branch, dateOut, dueDate);
+				final int copies = copiesDao.getCopies(branch, book);
+				if (copies > 0) {
+					copiesDao.setCopies(branch, book, copies - 1);
+					return loanDao.create(book, borrower, branch, dateOut, dueDate);
+				} else {
+					return null;
+				}
 			} else {
 				return null; // TODO: Add getLoan() method to interface
 			}
@@ -194,6 +200,18 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			if (LocalDate.now(clock).isAfter(loan.get().getDueDate())) {
 				return false;
 			} else {
+				try {
+					final int copies = copiesDao.getCopies(branch, book);
+					copiesDao.setCopies(branch, book, copies + 1);
+				} catch (final SQLException except) {
+					LOGGER.log(Level.SEVERE, "SQL error while incrementing copies on return", except);
+					try {
+						rollbackHandle.run();
+					} catch (final SQLException inner) {
+						LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
+					}
+					throw new UnknownSQLException("Incrementing copies on return failed", except);
+				}
 				try {
 					loanDao.delete(loan.get());
 				} catch (final SQLException except) {
