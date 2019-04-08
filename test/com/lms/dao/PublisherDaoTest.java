@@ -92,6 +92,10 @@ class PublisherDaoTest {
 		}
 	}
 
+	/**
+	 * Test record update.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testUpdate() throws SQLException {
 		final Publisher expected = new Publisher(1, "changed value",
@@ -111,6 +115,10 @@ class PublisherDaoTest {
 				"After update(), original is not retrievable");
 	}
 
+	/**
+	 * Test record deletion.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testDelete() throws SQLException {
 		final Publisher toDelete = new Publisher(1, "publisher to delete", "", "");
@@ -175,6 +183,10 @@ class PublisherDaoTest {
 
 	}
 
+	/**
+	 * Test single-record retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testGet() throws SQLException {
 		final List<Publisher> expected = Arrays.asList(
@@ -199,6 +211,10 @@ class PublisherDaoTest {
 		assertNull(testee.get(5), "get() returns null on nonexistent author");
 	}
 
+	/**
+	 * Test full-table retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testGetAll() throws SQLException {
 		assertTrue(testee.getAll().isEmpty(),

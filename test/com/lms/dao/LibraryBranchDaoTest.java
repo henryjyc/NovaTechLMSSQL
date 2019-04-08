@@ -58,6 +58,10 @@ class LibraryBranchDaoTest {
 		db.close();
 	}
 
+	/**
+	 * Test record insertion.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testCreate() throws SQLException {
 		try (PreparedStatement ps = db.prepareStatement(
@@ -86,6 +90,10 @@ class LibraryBranchDaoTest {
 		}
 	}
 
+	/**
+	 * Test record update.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testUpdate() throws SQLException {
 		try (PreparedStatement ps = db.prepareStatement(
@@ -120,6 +128,10 @@ class LibraryBranchDaoTest {
 		}
 	}
 
+	/**
+	 * Test record deletion.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testDelete() throws SQLException {
 		testee.create("to keep", "");
@@ -129,6 +141,10 @@ class LibraryBranchDaoTest {
 		assertEquals(1, testee.getAll().size(), "One row after deletion");
 	}
 
+	/**
+	 * Test that deleting a branch deletes all records of copy counts at that branch.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testDeleteCopiesCascade() throws SQLException {
 		final Branch toKeep = testee.create("to keep", "");
@@ -149,6 +165,10 @@ class LibraryBranchDaoTest {
 				"Expected number of copies after branch removal");
 	}
 
+	/**
+	 * Test that deleting a branch deletes all records of loans from that branch.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testDeleteLoansCascade() throws SQLException {
 		final Branch toKeep = testee.create("to keep", "");
@@ -165,6 +185,10 @@ class LibraryBranchDaoTest {
 		assertEquals(1, loansDao.getAll().size(), "One loan after branch removal");
 	}
 
+	/**
+	 * Test single-record retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testGet() throws SQLException {
 		try (PreparedStatement ps = db.prepareStatement(
@@ -188,6 +212,10 @@ class LibraryBranchDaoTest {
 		assertNull(testee.get(6), "get() returns null when no such row");
 	}
 
+	/**
+	 * Test full-table retrieval.
+	 * @throws SQLException if something goes wrong
+	 */
 	@Test
 	public final void testGetAll() throws SQLException {
 		assertEquals(Collections.emptyList(), testee.getAll(),
