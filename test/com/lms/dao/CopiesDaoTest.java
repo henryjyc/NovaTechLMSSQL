@@ -58,7 +58,7 @@ class CopiesDaoTest {
 	 * @throws SQLException if something goes wrong
 	 */
 	@Test
-	final void testGetCopies() throws SQLException {
+	public final void testGetCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final Book firstBook = bookDao.create("first book", null, null);
@@ -81,7 +81,7 @@ class CopiesDaoTest {
 	 * @throws SQLException if something goes wrong
 	 */
 	@Test
-	final void testSetCopies() throws SQLException {
+	public final void testSetCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final Book firstBook = bookDao.create("first book", null, null);
@@ -120,7 +120,7 @@ class CopiesDaoTest {
 	 * @throws SQLException if something goes wrong
 	 */
 	@Test
-	final void testGetAllBranchCopies() throws SQLException {
+	public final void testGetAllBranchCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final Book firstBook = bookDao.create("first book", null, null);
@@ -146,7 +146,7 @@ class CopiesDaoTest {
 	 * @throws SQLException if something goes wrong.
 	 */
 	@Test
-	final void testGetAllBookCopies() throws SQLException {
+	public final void testGetAllBookCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final Book firstBook = bookDao.create("first book", null, null);
@@ -172,7 +172,7 @@ class CopiesDaoTest {
 	 * @throws SQLException if something goes wrong
 	 */
 	@Test
-	final void testGetAllCopies() throws SQLException {
+	public final void testGetAllCopies() throws SQLException {
 		final BookDao bookDao = new BookDaoImpl(db);
 		final LibraryBranchDao branchDao = new LibraryBranchDaoImpl(db);
 		final Book firstBook = bookDao.create("first book", null, null);

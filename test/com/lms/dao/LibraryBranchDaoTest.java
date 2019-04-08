@@ -59,7 +59,7 @@ class LibraryBranchDaoTest {
 	}
 
 	@Test
-	final void testCreate() throws SQLException {
+	public final void testCreate() throws SQLException {
 		try (PreparedStatement ps = db.prepareStatement(
 				"SELECT * from `tbl_library_branch` ORDER BY `branchId` DESC")) {
 			try (ResultSet rs = ps.executeQuery()) {
@@ -87,7 +87,7 @@ class LibraryBranchDaoTest {
 	}
 
 	@Test
-	final void testUpdate() throws SQLException {
+	public final void testUpdate() throws SQLException {
 		try (PreparedStatement ps = db.prepareStatement(
 				"SELECT * from `tbl_library_branch` ORDER BY `branchId` DESC")) {
 			final Branch branch = testee.create("branch name", "branch address");
@@ -121,7 +121,7 @@ class LibraryBranchDaoTest {
 	}
 
 	@Test
-	final void testDelete() throws SQLException {
+	public final void testDelete() throws SQLException {
 		testee.create("to keep", "");
 		final Branch toRemove = testee.create("to delete", "");
 		assertEquals(2, testee.getAll().size(), "Two rows before deletion");
@@ -130,7 +130,7 @@ class LibraryBranchDaoTest {
 	}
 
 	@Test
-	final void testDeleteCopiesCascade() throws SQLException {
+	public final void testDeleteCopiesCascade() throws SQLException {
 		final Branch toKeep = testee.create("to keep", "");
 		final Branch toRemove = testee.create("to remove", "");
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -150,7 +150,7 @@ class LibraryBranchDaoTest {
 	}
 
 	@Test
-	final void testDeleteLoansCascade() throws SQLException {
+	public final void testDeleteLoansCascade() throws SQLException {
 		final Branch toKeep = testee.create("to keep", "");
 		final Branch toRemove = testee.create("to remove", "");
 		final BookDao bookDao = new BookDaoImpl(db);
@@ -166,7 +166,7 @@ class LibraryBranchDaoTest {
 	}
 
 	@Test
-	final void testGet() throws SQLException {
+	public final void testGet() throws SQLException {
 		try (PreparedStatement ps = db.prepareStatement(
 				"INSERT INTO `tbl_library_branch` (`branchName`, `branchAddress`) VALUES (?, ?)")) {
 			ps.setString(1, "name one");
@@ -189,7 +189,7 @@ class LibraryBranchDaoTest {
 	}
 
 	@Test
-	final void testGetAll() throws SQLException {
+	public final void testGetAll() throws SQLException {
 		assertEquals(Collections.emptyList(), testee.getAll(),
 				"getAll() returns empty list when no rows");
 		try (PreparedStatement ps = db.prepareStatement(

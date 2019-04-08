@@ -66,7 +66,7 @@ class PublisherDaoTest {
 	 * @throws SQLException if something goes very wrong
 	 */
 	@Test
-	final void testCreate() throws SQLException {
+	public final void testCreate() throws SQLException {
 		final Publisher publisher = testee.create("test publisher", "test address",
 				"test phone");
 		assertEquals("test publisher", publisher.getName(),
@@ -93,7 +93,7 @@ class PublisherDaoTest {
 	}
 
 	@Test
-	final void testUpdate() throws SQLException {
+	public final void testUpdate() throws SQLException {
 		final Publisher expected = new Publisher(1, "changed value",
 				"changed address", "changed phone");
 		final Publisher created = testee.create("original name", "original address",
@@ -112,7 +112,7 @@ class PublisherDaoTest {
 	}
 
 	@Test
-	final void testDelete() throws SQLException {
+	public final void testDelete() throws SQLException {
 		final Publisher toDelete = new Publisher(1, "publisher to delete", "", "");
 		final List<Publisher> expected = Arrays.asList(
 				new Publisher(2, "publisher one"), new Publisher(3, "publisher two"),
@@ -176,7 +176,7 @@ class PublisherDaoTest {
 	}
 
 	@Test
-	final void testGet() throws SQLException {
+	public final void testGet() throws SQLException {
 		final List<Publisher> expected = Arrays.asList(
 				new Publisher(1, "one author", "one address", "one phone"),
 				new Publisher(2, "two author", "two address", "two phone"),
@@ -200,7 +200,7 @@ class PublisherDaoTest {
 	}
 
 	@Test
-	final void testGetAll() throws SQLException {
+	public final void testGetAll() throws SQLException {
 		assertTrue(testee.getAll().isEmpty(),
 				"Before adding any authors, getAll() returns empty list");
 		final List<Publisher> expected = Arrays.asList(
