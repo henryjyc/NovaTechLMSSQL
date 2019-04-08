@@ -29,6 +29,10 @@ import com.lms.util.ThrowingRunnable;
  */
 public final class LibrarianServiceImpl implements LibrarianService {
 	/**
+	 * Extracted constant message to log when a rollback fails.
+	 */
+	private static final String ROLLBACK_FAILED = "Further error while rolling back transaction";
+	/**
 	 * The DAO for the "branches" table.
 	 */
 	private final LibraryBranchDao branchDao;
@@ -104,7 +108,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting all branches failed", except);
 		}
@@ -119,7 +123,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UpdateException("Updating book record failed");
 		}
@@ -135,7 +139,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Setting copy records failed", except);
 		}
@@ -150,7 +154,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting book records failed", except);
 		}
@@ -165,7 +169,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting copy records failed", except);
 		}

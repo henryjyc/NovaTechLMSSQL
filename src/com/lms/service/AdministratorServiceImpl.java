@@ -45,6 +45,10 @@ import com.lms.util.ThrowingRunnable;
  */
 public final class AdministratorServiceImpl implements AdministratorService {
 	/**
+	 * Extracted constant message to log when a rollback fails.
+	 */
+	private static final String ROLLBACK_FAILED = "Further error while rolling back transaction";
+	/**
 	 * DAO to access the library-branch table.
 	 */
 	private final LibraryBranchDao branchDao;
@@ -144,7 +148,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting all branches failed", except);
 		}
@@ -160,7 +164,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new InsertException("Creating a book failed"); // TODO: Add constructor taking cause to all custom exceptions
 		}
@@ -175,7 +179,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UpdateException("Updating book record failed");
 		}
@@ -190,7 +194,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new DeleteException("Removing book record failed");
 		}
@@ -205,7 +209,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting book records failed", except);
 		}
@@ -220,7 +224,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new InsertException("Creating an author failed");
 		}
@@ -236,7 +240,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UpdateException("Updating author record failed");
 		}
@@ -251,7 +255,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new DeleteException("Removing author record failed");
 		}
@@ -266,7 +270,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting author records failed", except);
 		}
@@ -287,7 +291,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new InsertException("Creating a publisher failed");
 		}
@@ -302,7 +306,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UpdateException("Updating publisher record failed");
 		}
@@ -317,7 +321,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new DeleteException("Removing publisher record failed");
 		}
@@ -332,7 +336,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting publisher records failed", except);
 		}
@@ -347,7 +351,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new InsertException("Creating a branch failed");
 		}
@@ -362,7 +366,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new DeleteException("Removing branch record failed");
 		}
@@ -377,7 +381,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UpdateException("Updating branch record failed");
 		}
@@ -393,7 +397,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new InsertException("Creating a borrower failed");
 		}
@@ -408,7 +412,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UpdateException("Updating borrower record failed");
 		}
@@ -423,7 +427,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new DeleteException("Removing borrower record failed");
 		}
@@ -438,7 +442,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting borrower records failed", except);
 		}
@@ -455,7 +459,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting loan record failed", except);
 		}
@@ -468,7 +472,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 				try {
 					rollbackHandle.run();
 				} catch (final SQLException inner) {
-					LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+					LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 				}
 				throw new UpdateException("Updating loan record failed");
 			}
@@ -487,7 +491,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			try {
 				rollbackHandle.run();
 			} catch (final SQLException inner) {
-				LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", inner);
+				LOGGER.log(Level.SEVERE, ROLLBACK_FAILED, inner);
 			}
 			throw new UnknownSQLException("Getting loan records failed", except);
 		}
