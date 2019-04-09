@@ -141,8 +141,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return branchDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE,  "SQL error while getting all branches", except);
-			rollback();
-			throw new UnknownSQLException("Getting all branches failed", except);
+			throw rollback(new UnknownSQLException("Getting all branches failed", except));
 		}
 	}
 
@@ -153,8 +152,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return bookDao.create(title, author, publisher);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while creating a book", except);
-			rollback();
-			throw new InsertException("Creating a book failed", except);
+			throw rollback(new InsertException("Creating a book failed", except));
 		}
 	}
 
@@ -164,8 +162,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			bookDao.update(book);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while updating a book", except);
-			rollback();
-			throw new UpdateException("Updating book record failed", except);
+			throw rollback(new UpdateException("Updating book record failed", except));
 		}
 	}
 
@@ -175,8 +172,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			bookDao.delete(book);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while removing a book record", except);
-			rollback();
-			throw new DeleteException("Removing book record failed", except);
+			throw rollback(new DeleteException("Removing book record failed", except));
 		}
 	}
 
@@ -186,8 +182,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return bookDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting books", except);
-			rollback();
-			throw new UnknownSQLException("Getting book records failed", except);
+			throw rollback(new UnknownSQLException("Getting book records failed", except));
 		}
 	}
 
@@ -197,8 +192,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return authorDao.create(name);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while creating an author", except);
-			rollback();
-			throw new InsertException("Creating an author failed", except);
+			throw rollback(new InsertException("Creating an author failed", except));
 		}
 
 	}
@@ -209,8 +203,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			authorDao.update(author);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while updating an author", except);
-			rollback();
-			throw new UpdateException("Updating author record failed", except);
+			throw rollback(new UpdateException("Updating author record failed", except));
 		}
 	}
 
@@ -220,8 +213,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			authorDao.delete(author);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while removing an author record", except);
-			rollback();
-			throw new DeleteException("Removing author record failed", except);
+			throw rollback(new DeleteException("Removing author record failed", except));
 		}
 	}
 
@@ -231,8 +223,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return authorDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting authors", except);
-			rollback();
-			throw new UnknownSQLException("Getting author records failed", except);
+			throw rollback(new UnknownSQLException("Getting author records failed", except));
 		}
 	}
 
@@ -248,8 +239,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return publisherDao.create(name, address, phone);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while creating a publisher", except);
-			rollback();
-			throw new InsertException("Creating a publisher failed", except);
+			throw rollback(new InsertException("Creating a publisher failed", except));
 		}
 	}
 
@@ -259,8 +249,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			publisherDao.update(publisher);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while updating a publisher", except);
-			rollback();
-			throw new UpdateException("Updating publisher record failed", except);
+			throw rollback(new UpdateException("Updating publisher record failed", except));
 		}
 	}
 
@@ -270,8 +259,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			publisherDao.delete(publisher);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while removing a publisher record", except);
-			rollback();
-			throw new DeleteException("Removing publisher record failed", except);
+			throw rollback(new DeleteException("Removing publisher record failed", except));
 		}
 	}
 
@@ -281,8 +269,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return publisherDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting publishers", except);
-			rollback();
-			throw new UnknownSQLException("Getting publisher records failed", except);
+			throw rollback(new UnknownSQLException("Getting publisher records failed", except));
 		}
 	}
 
@@ -292,8 +279,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return branchDao.create(name, address);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while creating a branch", except);
-			rollback();
-			throw new InsertException("Creating a branch failed", except);
+			throw rollback(new InsertException("Creating a branch failed", except));
 		}
 	}
 
@@ -303,8 +289,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			branchDao.delete(branch);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while removing a branch record", except);
-			rollback();
-			throw new DeleteException("Removing branch record failed", except);
+			throw rollback(new DeleteException("Removing branch record failed", except));
 		}
 	}
 
@@ -314,8 +299,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			branchDao.update(branch);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while updating a branch", except);
-			rollback();
-			throw new UpdateException("Updating branch record failed", except);
+			throw rollback(new UpdateException("Updating branch record failed", except));
 		}
 	}
 
@@ -326,8 +310,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return borrowerDao.create(name, address, phone);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while creating a borrower", except);
-			rollback();
-			throw new InsertException("Creating a borrower failed", except);
+			throw rollback(new InsertException("Creating a borrower failed", except));
 		}
 	}
 
@@ -337,8 +320,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			borrowerDao.update(borrower);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while updating a borrower", except);
-			rollback();
-			throw new UpdateException("Updating borrower record failed", except);
+			throw rollback(new UpdateException("Updating borrower record failed", except));
 		}
 	}
 
@@ -348,8 +330,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			borrowerDao.delete(borrower);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while removing a borrower record", except);
-			rollback();
-			throw new DeleteException("Removing borrower record failed", except);
+			throw rollback(new DeleteException("Removing borrower record failed", except));
 		}
 	}
 
@@ -359,8 +340,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return borrowerDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting borrowers", except);
-			rollback();
-			throw new UnknownSQLException("Getting borrower records failed", except);
+			throw rollback(new UnknownSQLException("Getting borrower records failed", except));
 		}
 	}
 
@@ -372,8 +352,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			loan = Optional.ofNullable(loansDao.get(book, borrower, branch));
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loan record", except);
-			rollback();
-			throw new UnknownSQLException("Getting loan record failed", except);
+			throw rollback(new UnknownSQLException("Getting loan record failed", except));
 		}
 		if (loan.isPresent()) {
 			loan.get().setDueDate(dueDate);
@@ -381,8 +360,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 				loansDao.update(loan.get());
 			} catch (final SQLException except) {
 				LOGGER.log(Level.SEVERE, "SQL error while updating a loan", except);
-				rollback();
-				throw new UpdateException("Updating loan record failed", except);
+				throw rollback(new UpdateException("Updating loan record failed", except));
 			}
 			return true;
 		} else {
@@ -396,8 +374,7 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			return loansDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loans", except);
-			rollback();
-			throw new UnknownSQLException("Getting loan records failed", except);
+			throw rollback(new UnknownSQLException("Getting loan records failed", except));
 		}
 	}
 
@@ -410,11 +387,13 @@ public final class AdministratorServiceImpl implements AdministratorService {
 			throw new UnknownSQLException("Committing the transaction failed", except);
 		}
 	}
-	private void rollback() {
+	private <E extends Exception> E rollback(final E pending) {
 		try {
 			rollbackHandle.run();
 		} catch (final SQLException except) {
-			LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", except); // TODO: add as suppressed exception to next-thrown
+			LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", except);
+			pending.addSuppressed(except);
 		}
+		return pending;
 	}
 }

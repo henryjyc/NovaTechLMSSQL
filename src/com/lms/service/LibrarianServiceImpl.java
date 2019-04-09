@@ -101,8 +101,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			return branchDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE,  "SQL error while getting all branches", except);
-			rollback();
-			throw new UnknownSQLException("Getting all branches failed", except);
+			throw rollback(new UnknownSQLException("Getting all branches failed", except));
 		}
 	}
 
@@ -112,8 +111,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			branchDao.update(branch);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while updating a book", except);
-			rollback();
-			throw new UpdateException("Updating book record failed", except);
+			throw rollback(new UpdateException("Updating book record failed", except));
 		}
 	}
 
@@ -124,8 +122,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			copiesDao.setCopies(branch, book, noOfCopies);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while setting copy records", except);
-			rollback();
-			throw new UnknownSQLException("Setting copy records failed", except);
+			throw rollback(new UnknownSQLException("Setting copy records failed", except));
 		}
 	}
 
@@ -135,8 +132,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			return bookDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting books", except);
-			rollback();
-			throw new UnknownSQLException("Getting book records failed", except);
+			throw rollback(new UnknownSQLException("Getting book records failed", except));
 		}
 	}
 
@@ -146,8 +142,7 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			return copiesDao.getAllCopies();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting copy records", except);
-			rollback();
-			throw new UnknownSQLException("Getting copy records failed", except);
+			throw rollback(new UnknownSQLException("Getting copy records failed", except));
 		}
 	}
 	@Override
@@ -159,11 +154,13 @@ public final class LibrarianServiceImpl implements LibrarianService {
 			throw new UnknownSQLException("Committing the transaction failed", except);
 		}
 	}
-	private void rollback() {
+	private <E extends Exception> E rollback(final E pending) {
 		try {
 			rollbackHandle.run();
 		} catch (final SQLException except) {
-			LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", except); // TODO: add as suppressed exception to next-thrown
+			LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", except);
+			pending.addSuppressed(except);
 		}
+		return pending;
 	}
 }

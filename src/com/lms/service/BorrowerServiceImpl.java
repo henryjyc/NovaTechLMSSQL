@@ -125,8 +125,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			return branchDao.getAll();
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE,  "SQL error while getting all branches", except);
-			rollback();
-			throw new UnknownSQLException("Getting all branches failed", except);
+			throw rollback(new UnknownSQLException("Getting all branches failed", except));
 		}
 	}
 
@@ -148,8 +147,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			}
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while creating a loan record", except);
-			rollback();
-			throw new InsertException("Creating a loan failed", except);
+			throw rollback(new InsertException("Creating a loan failed", except));
 		}
 	}
 
@@ -160,8 +158,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			return copiesDao.getAllBranchCopies(branch);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting branch copies", except);
-			rollback();
-			throw new UnknownSQLException("Getting branch copy records failed", except);
+			throw rollback(new UnknownSQLException("Getting branch copy records failed", except));
 		}
 	}
 
@@ -173,8 +170,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			loan = Optional.ofNullable(loanDao.get(book, borrower, branch));
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loan details", except);
-			rollback();
-			throw new UnknownSQLException("Getting loan details failed", except);
+			throw rollback(new UnknownSQLException("Getting loan details failed", except));
 		}
 		if (loan.isPresent()) {
 			if (LocalDate.now(clock).isAfter(loan.get().getDueDate())) {
@@ -185,15 +181,13 @@ public final class BorrowerServiceImpl implements BorrowerService {
 					copiesDao.setCopies(branch, book, copies + 1);
 				} catch (final SQLException except) {
 					LOGGER.log(Level.SEVERE, "SQL error while incrementing copies on return", except);
-					rollback();
-					throw new UnknownSQLException("Incrementing copies on return failed", except);
+					throw rollback(new UnknownSQLException("Incrementing copies on return failed", except));
 				}
 				try {
 					loanDao.delete(loan.get());
 				} catch (final SQLException except) {
 					LOGGER.log(Level.SEVERE, "SQL error while removing a loan record", except);
-					rollback();
-					throw new DeleteException("Removing loan record failed", except);
+					throw rollback(new DeleteException("Removing loan record failed", except));
 				}
 				return true;
 			}
@@ -218,8 +212,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 					.collect(Collectors.toList());
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting loan records", except);
-			rollback();
-			throw new UnknownSQLException("Getting loan records failed", except);
+			throw rollback(new UnknownSQLException("Getting loan records failed", except));
 		}
 	}
 
@@ -229,8 +222,7 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			return borrowerDao.get(cardNo);
 		} catch (final SQLException except) {
 			LOGGER.log(Level.SEVERE, "SQL error while getting borrower details", except);
-			rollback();
-			throw new UnknownSQLException("Getting borrower record failed", except);
+			throw rollback(new UnknownSQLException("Getting borrower record failed", except));
 		}
 	}
 	@Override
@@ -242,11 +234,13 @@ public final class BorrowerServiceImpl implements BorrowerService {
 			throw new UnknownSQLException("Committing the transaction failed", except);
 		}
 	}
-	private void rollback() {
+	private <E extends Exception> E rollback(final E pending) {
 		try {
 			rollbackHandle.run();
 		} catch (final SQLException except) {
-			LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", except); // TODO: add as suppressed exception to next-thrown
+			LOGGER.log(Level.SEVERE, "Further error while rolling back transaction", except);
+			pending.addSuppressed(except);
 		}
+		return pending;
 	}
 }
