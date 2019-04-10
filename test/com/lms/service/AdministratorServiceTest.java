@@ -1,6 +1,7 @@
 package com.lms.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
