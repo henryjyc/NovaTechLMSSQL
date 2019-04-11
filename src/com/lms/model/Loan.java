@@ -1,5 +1,6 @@
 package com.lms.model;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -132,10 +133,28 @@ public class Loan {
 			return Objects.equals(book, ((Loan) obj).getBook())
 					&& Objects.equals(borrower, ((Loan) obj).getBorrower())
 					&& Objects.equals(branch, ((Loan) obj).getBranch())
-					&& Objects.equals(dateOut, ((Loan) obj).getDateOut())
+					&& timesEqual(dateOut, ((Loan) obj).getDateOut())
 					&& Objects.equals(dueDate, ((Loan) obj).getDueDate());
 		} else {
 			return false;
+		}
+	}
+
+	/**
+	 * Test whether the difference between two timestamps is less than two hours; if
+	 * either is null, returns true iff the other is also null.
+	 *
+	 * @param first  one timestamp
+	 * @param second another timestamp
+	 * @return whether the two are close enough to equal for our purposes.
+	 */
+	private static boolean timesEqual(final LocalDateTime first, final LocalDateTime second) {
+		if (first == null) {
+			return second == null;
+		} else if (second == null) {
+			return false;
+		} else {
+			return Duration.between(first, second).abs().toHours() < 2;
 		}
 	}
 
