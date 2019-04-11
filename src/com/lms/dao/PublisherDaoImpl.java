@@ -87,9 +87,11 @@ public final class PublisherDaoImpl implements PublisherDao {
 
 	@Override
 	public void delete(final Publisher publisher) throws SQLException {
-		synchronized (deleteStatement) {
-			deleteStatement.setInt(1, publisher.getId());
-			deleteStatement.executeUpdate();
+		if (publisher != null) {
+			synchronized (deleteStatement) {
+				deleteStatement.setInt(1, publisher.getId());
+				deleteStatement.executeUpdate();
+			}
 		}
 	}
 

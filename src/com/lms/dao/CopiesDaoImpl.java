@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -84,6 +85,9 @@ public final class CopiesDaoImpl implements CopiesDao {
 
 	@Override
 	public int getCopies(final Branch branch, final Book book) throws SQLException {
+		if (branch == null || book == null) {
+			return 0; // TODO: Throw IllegalArgumentException instead?
+		}
 		synchronized (findStatement) {
 			findStatement.setInt(1, book.getId());
 			findStatement.setInt(2, branch.getId());
@@ -107,6 +111,8 @@ public final class CopiesDaoImpl implements CopiesDao {
 		if (noOfCopies < 0) {
 			throw new IllegalArgumentException(
 					"Number of copies must be nonnegative");
+		} else if (book == null || branch == null) {
+			// TODO: throw IllegalArgumentException?
 		} else if (noOfCopies == 0) {
 			synchronized (deleteStatement) {
 				deleteStatement.setInt(1, book.getId());
@@ -134,59 +140,68 @@ public final class CopiesDaoImpl implements CopiesDao {
 	@Override
 	public Map<Book, Integer> getAllBranchCopies(final Branch branch)
 			throws SQLException {
-		final Map<Book, Integer> retval = new HashMap<>();
-		synchronized (findByBranchStatement) {
-			findByBranchStatement.setInt(1, branch.getId());
-			try (ResultSet result = findByBranchStatement.executeQuery()) {
-				while (result.next()) {
-					final int authorId = result.getInt("authorId");
-					final Author author;
-					if (result.wasNull()) {
-						author = null;
-					} else {
-						author = new Author(authorId,
-								result.getString("authorName"));
+		if (branch == null) {
+			return Collections.emptyMap();
+		} else {
+			final Map<Book, Integer> retval = new HashMap<>();
+			synchronized (findByBranchStatement) {
+				findByBranchStatement.setInt(1, branch.getId());
+				try (ResultSet result = findByBranchStatement.executeQuery()) {
+					while (result.next()) {
+						final int authorId = result.getInt("authorId");
+						final Author author;
+						if (result.wasNull()) {
+							author = null;
+						} else {
+							author = new Author(authorId,
+									result.getString("authorName"));
+						}
+						final int publisherId = result.getInt("publisherId");
+						final Publisher publisher;
+						if (result.wasNull()) {
+							publisher = null;
+						} else {
+							publisher = new Publisher(publisherId,
+									result.getString("publisherName"),
+									Optional.ofNullable(
+											result.getString("publisherAddress"))
+											.orElse(""),
+									Optional.ofNullable(
+											result.getString("publisherPhone"))
+											.orElse(""));
+						}
+						final Book book = new Book(result.getInt("bookId"),
+								result.getString("title"), author, publisher);
+						retval.put(book, result.getInt(N_COPIES_FIELD));
 					}
-					final int publisherId = result.getInt("publisherId");
-					final Publisher publisher;
-					if (result.wasNull()) {
-						publisher = null;
-					} else {
-						publisher = new Publisher(publisherId,
-								result.getString("publisherName"),
-								Optional.ofNullable(
-										result.getString("publisherAddress"))
-										.orElse(""),
-								Optional.ofNullable(
-										result.getString("publisherPhone"))
-										.orElse(""));
-					}
-					final Book book = new Book(result.getInt("bookId"),
-							result.getString("title"), author, publisher);
-					retval.put(book, result.getInt(N_COPIES_FIELD));
 				}
+				return retval;
 			}
-			return retval;
 		}
 	}
 
 	@Override
 	public Map<Branch, Integer> getAllBookCopies(final Book book)
 			throws SQLException {
-		final Map<Branch, Integer> retval = new HashMap<>();
-		synchronized (findByBookStatement) {
-			findByBookStatement.setInt(1, book.getId());
-			try (ResultSet result = findByBookStatement.executeQuery()) {
-				while (result.next()) {
-					final Branch branch = new Branch(result.getInt("branchId"),
-							Optional.ofNullable(result.getString("branchName"))
-									.orElse(""),
-							Optional.ofNullable(result.getString("branchAddress"))
-									.orElse(""));
-					retval.put(branch, result.getInt(N_COPIES_FIELD));
+		if (book == null) {
+			return Collections.emptyMap();
+		} else {
+			final Map<Branch, Integer> retval = new HashMap<>();
+			synchronized (findByBookStatement) {
+				findByBookStatement.setInt(1, book.getId());
+				try (ResultSet result = findByBookStatement.executeQuery()) {
+					while (result.next()) {
+						final Branch branch = new Branch(result.getInt("branchId"),
+								Optional.ofNullable(result.getString("branchName"))
+										.orElse(""),
+								Optional.ofNullable(
+										result.getString("branchAddress"))
+										.orElse(""));
+						retval.put(branch, result.getInt(N_COPIES_FIELD));
+					}
 				}
+				return retval;
 			}
-			return retval;
 		}
 	}
 

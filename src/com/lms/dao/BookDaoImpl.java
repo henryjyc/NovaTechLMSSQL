@@ -91,9 +91,11 @@ public final class BookDaoImpl implements BookDao {
 
 	@Override
 	public void delete(final Book book) throws SQLException {
-		synchronized (deleteStatement) {
-			deleteStatement.setInt(1, book.getId());
-			deleteStatement.executeUpdate();
+		if (book != null) {
+			synchronized (deleteStatement) {
+				deleteStatement.setInt(1, book.getId());
+				deleteStatement.executeUpdate();
+			}
 		}
 	}
 

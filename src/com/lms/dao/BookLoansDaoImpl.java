@@ -93,39 +93,46 @@ public final class BookLoansDaoImpl implements BookLoansDao {
 
 	@Override
 	public void update(final Loan loan) throws SQLException {
-		synchronized (updateStatement) {
-			final LocalDateTime dateOut = loan.getDateOut();
-			if (dateOut == null) {
-				updateStatement.setNull(1, Types.DATE);
-			} else {
-				updateStatement.setDate(1, Date.valueOf(dateOut.toLocalDate()));
+		if (loan != null) {
+			synchronized (updateStatement) {
+				final LocalDateTime dateOut = loan.getDateOut();
+				if (dateOut == null) {
+					updateStatement.setNull(1, Types.DATE);
+				} else {
+					updateStatement.setDate(1, Date.valueOf(dateOut.toLocalDate()));
+				}
+				final LocalDate dueDate = loan.getDueDate();
+				if (dueDate == null) {
+					updateStatement.setNull(2, Types.DATE);
+				} else {
+					updateStatement.setDate(2, Date.valueOf(dueDate));
+				}
+				updateStatement.setInt(3, loan.getBook().getId());
+				updateStatement.setInt(4, loan.getBranch().getId());
+				updateStatement.setInt(5, loan.getBorrower().getCardNo());
+				updateStatement.executeUpdate();
 			}
-			final LocalDate dueDate = loan.getDueDate();
-			if (dueDate == null) {
-				updateStatement.setNull(2, Types.DATE);
-			} else {
-				updateStatement.setDate(2, Date.valueOf(dueDate));
-			}
-			updateStatement.setInt(3, loan.getBook().getId());
-			updateStatement.setInt(4, loan.getBranch().getId());
-			updateStatement.setInt(5, loan.getBorrower().getCardNo());
-			updateStatement.executeUpdate();
 		}
 	}
 
 	@Override
 	public void delete(final Loan loan) throws SQLException {
-		synchronized (deleteStatement) {
-			deleteStatement.setInt(1, loan.getBook().getId());
-			deleteStatement.setInt(2, loan.getBranch().getId());
-			deleteStatement.setInt(3, loan.getBorrower().getCardNo());
-			deleteStatement.executeUpdate();
+		if (loan != null) {
+			synchronized (deleteStatement) {
+				deleteStatement.setInt(1, loan.getBook().getId());
+				deleteStatement.setInt(2, loan.getBranch().getId());
+				deleteStatement.setInt(3, loan.getBorrower().getCardNo());
+				deleteStatement.executeUpdate();
+			}
 		}
 	}
 
 	@Override
 	public Loan get(final Book book, final Borrower borrower, final Branch branch)
 			throws SQLException {
+		if (book == null || borrower == null || branch == null) {
+			return null;
+		}
 		synchronized (findStatement) {
 			findStatement.setInt(1, book.getId());
 			findStatement.setInt(2, branch.getId());

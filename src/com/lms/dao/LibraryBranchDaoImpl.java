@@ -86,9 +86,11 @@ public final class LibraryBranchDaoImpl implements LibraryBranchDao {
 
 	@Override
 	public void delete(final Branch branch) throws SQLException {
-		synchronized (deleteStatement) {
-			deleteStatement.setInt(1, branch.getId());
-			deleteStatement.executeUpdate();
+		if (branch != null) {
+			synchronized (deleteStatement) {
+				deleteStatement.setInt(1, branch.getId());
+				deleteStatement.executeUpdate();
+			}
 		}
 	}
 

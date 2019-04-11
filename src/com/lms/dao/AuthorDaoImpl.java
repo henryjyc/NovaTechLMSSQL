@@ -74,9 +74,11 @@ public final class AuthorDaoImpl implements AuthorDao {
 
 	@Override
 	public void delete(final Author author) throws SQLException {
-		synchronized (deleteStatement) {
-			deleteStatement.setInt(1, author.getId());
-			deleteStatement.executeUpdate();
+		if (author != null) {
+			synchronized (deleteStatement) {
+				deleteStatement.setInt(1, author.getId());
+				deleteStatement.executeUpdate();
+			}
 		}
 	}
 

@@ -85,9 +85,11 @@ public final class BorrowerDaoImpl implements BorrowerDao {
 
 	@Override
 	public void delete(final Borrower borrower) throws SQLException {
-		synchronized (deleteStatement) {
-			deleteStatement.setInt(1, borrower.getCardNo());
-			deleteStatement.executeUpdate();
+		if (borrower != null) {
+			synchronized (deleteStatement) {
+				deleteStatement.setInt(1, borrower.getCardNo());
+				deleteStatement.executeUpdate();
+			}
 		}
 	}
 
