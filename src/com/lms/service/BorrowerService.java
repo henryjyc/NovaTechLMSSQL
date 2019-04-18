@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import com.lms.customExceptions.TransactionException;
 import com.lms.model.Book;
 import com.lms.model.Borrower;
 import com.lms.model.Branch;
@@ -29,7 +30,7 @@ public interface BorrowerService extends Service {
 	 * @param dueDate the date the book is due
 	 * @return the object representing the loan
 	 */
-	Loan borrowBook(Borrower borrower, Book book, Branch branch, LocalDateTime dateOut, LocalDate dueDate);
+	Loan borrowBook(Borrower borrower, Book book, Branch branch, LocalDateTime dateOut, LocalDate dueDate) throws TransactionException;
 
 	/**
 	 * Get all book-copy counts for the given branch.
@@ -38,22 +39,20 @@ public interface BorrowerService extends Service {
 	 * @return a mapping from books in that library to the number of copies of each
 	 *         that it has.
 	 */
-	Map<Book, Integer> getAllBranchCopies(Branch branch);
+	Map<Book, Integer> getAllBranchCopies(Branch branch) throws TransactionException;
 
 	/**
 	 * Handle a returned book: if there is an outstanding loan of the given book to
 	 * the given borrower from the given branch, and the book is not overdue, remove
 	 * the loan from the database and return true. If it is overdue, return false.
 	 *
-	 * <p>TODO: What to do when no matching loan exists?
-	 *
 	 * @param borrower the borrower returning the book
 	 * @param book the book being returned
 	 * @param branch the branch from which it was borrowed
-	 * @param dueDate TODO: document this once author clarifies its purpose
-	 * @return true on success, false if the book was overdue
+	 * @param returnDate the date the borrower returned the book
+	 * @return true on success, false if the book was overdue, and null if it was not present
 	 */
-	boolean returnBook(Borrower borrower, Book book, Branch branch, LocalDate dueDate);
+	Boolean returnBook(Borrower borrower, Book book, Branch branch, LocalDate returnDate) throws TransactionException;
 
 	/**
 	 * Get all branches from which the borrower has an outstanding loan.
@@ -61,15 +60,15 @@ public interface BorrowerService extends Service {
 	 * @param borrower in question
 	 * @return all branches the borrower owes a book return to.
 	 */
-	List<Branch> getAllBranchesWithLoan(Borrower borrower);
+	List<Branch> getAllBranchesWithLoan(Borrower borrower) throws TransactionException;
 
 	/**
-	 * Get all books the borrower has borrowed from any library branch.
+	 * Get all book loans the borrower has borrowed from any library branch.
 	 * 
 	 * @param borrower in question
-	 * @return the list of books the borrower has out from any library.
+	 * @return the list of book loans the borrower has out from any library.
 	 */
-	List<Book> getAllBorrowedBooks(Borrower borrower);
+	List<Loan> getAllBorrowedBooks(Borrower borrower) throws TransactionException;
 
 	/**
 	 * Get Borrower with the specified cardNo
@@ -77,6 +76,6 @@ public interface BorrowerService extends Service {
 	 * @param cardNo the borrower's cardNo
 	 * @return Borrower or null if there is no Borrower with that cardNo
 	 */
-	Borrower getBorrower(int cardNo);
+	Borrower getBorrower(int cardNo) throws TransactionException;
 
 }
